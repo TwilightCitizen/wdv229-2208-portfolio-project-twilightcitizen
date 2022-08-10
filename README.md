@@ -3,11 +3,11 @@
 
 # Project Name: WDP2 Portfolio Project
 
-### Student First & Last Name
+### David A. Clark, Jr.
 
-🆔 &nbsp; 000#######
+🆔 &nbsp; #0004796375
 
-📪 &nbsp; email@student.fullsail.edu
+📪 &nbsp; daclark1@student.fullsail.edu
 
 
 ![Degree Program](https://img.shields.io/badge/Degree-Web%20Development-orange?logo=gnometerminal)
