@@ -14,7 +14,7 @@ import Search from "../pages/search"
 
 const App = () => {
     return (
-        <div className="App">
+        <div className="App" style={styles.app}>
             <Header/>
 
             <Routes>
@@ -31,3 +31,12 @@ const App = () => {
 }
 
 export default App;
+
+const styles = {
+    app: {
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        flexWrap: 'wrap'
+    }
+}
