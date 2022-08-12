@@ -1,8 +1,9 @@
 import { useContext } from "react";
-
-import { ColorContext, LayoutContext, PageContext } from "../app/App";
 import { NavLink } from "react-router-dom";
 import { RiArrowGoBackFill } from "react-icons/ri";
+
+import { ColorContext, LayoutContext, PageContext } from "../app/App";
+import Search from "../components/search"
 
 const Header = () => {
     const colors = useContext(ColorContext)
@@ -10,7 +11,7 @@ const Header = () => {
     const [page,] = useContext(PageContext);
     const icon = page.icon ? page.icon(styles.icon) : <></>;
 
-    const backNavigation = (backNavigation => {
+    const backNavigation = backNavigation => {
         if (!backNavigation) return;
 
         return (
@@ -19,13 +20,14 @@ const Header = () => {
                 <p style={styles.backNavigationLabel(colors)}>Go back to {backNavigation.title}</p>
             </NavLink>
         )
-    })(page.backNavigation);
+    };
 
     return (
         <header style={styles.header(layout.header, colors)}>
             {icon}
             <h1>{page.title}</h1>
-            {backNavigation}
+            <Search/>
+            {backNavigation(page.backNavigation)}
         </header>
     );
 };
