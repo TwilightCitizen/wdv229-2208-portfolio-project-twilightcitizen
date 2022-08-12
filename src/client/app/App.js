@@ -20,8 +20,9 @@ import Footer from "../components/Footer";
 
 import Dashboard from "../pages/Dashboard";
 import Detail from "../pages/Detail";
-import User from "../pages/User"
-import Search from "../pages/Search"
+import User from "../pages/User";
+import Search from "../pages/Search";
+import Error404 from "../pages/Error404";
 
 // Contexts
 
@@ -48,6 +49,8 @@ const App = () => {
                         <Route path="/detail" element={<Detail/>}/>
                         <Route path="/user" element={<User/>}/>
                         <Route path="/search" element={<Search/>}/>
+                        <Route path="/error-404" element={<Error404/>}/>
+                        <Route path="*" element={<Navigate to="/error-404" replace/>}/>
                     </Routes>
                 </div>
 
