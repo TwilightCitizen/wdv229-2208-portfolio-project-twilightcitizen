@@ -1,10 +1,23 @@
+/*
+David A. Clark, Jr.
+#0004796375
+WDV229 2208
+Portfolio Project
+*/
+
+// Imports
+
 import { NavLink } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { RiDashboardFill } from "react-icons/ri";
 
 import { PageContext } from "../app/App";
 
+// Constants
+
 const icon = style => <RiDashboardFill style={style}/>
+
+// Component
 
 const Dashboard = () => {
     const [, setPage] = useContext(PageContext);
@@ -26,4 +39,8 @@ const Dashboard = () => {
     );
 };
 
+// Exports
+
 export default Dashboard;
+
+// Styles

@@ -1,6 +1,17 @@
+/*
+David A. Clark, Jr.
+#0004796375
+WDV229 2208
+Portfolio Project
+*/
+
+// Imports
+
 import { useContext } from "react";
 
 import { ColorContext, LayoutContext } from "../app/App";
+
+// Component
 
 const Footer = () => {
     const colors = useContext(ColorContext);
@@ -13,7 +24,11 @@ const Footer = () => {
     );
 };
 
+// Exports
+
 export default Footer;
+
+// Styles
 
 const styles = {
     footer: (layout, colors) => ({

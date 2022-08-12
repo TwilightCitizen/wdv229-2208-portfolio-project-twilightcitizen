@@ -1,9 +1,20 @@
+/*
+David A. Clark, Jr.
+#0004796375
+WDV229 2208
+Portfolio Project
+*/
+
+// Imports
+
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { RiArrowGoBackFill } from "react-icons/ri";
 
 import { ColorContext, LayoutContext, PageContext } from "../app/App";
 import SearchBox from "./SearchBox"
+
+// Component
 
 const Header = () => {
     const colors = useContext(ColorContext)
@@ -32,7 +43,11 @@ const Header = () => {
     );
 };
 
+// Exports
+
 export default Header;
+
+// Styles
 
 const styles = {
     header: (layout, colors) => ({

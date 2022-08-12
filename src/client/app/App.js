@@ -1,3 +1,12 @@
+/*
+David A. Clark, Jr.
+#0004796375
+WDV229 2208
+Portfolio Project
+*/
+
+// Imports
+
 import {
     Navigate,
     Routes,
@@ -14,9 +23,13 @@ import Detail from "../pages/Detail";
 import User from "../pages/User"
 import Search from "../pages/Search"
 
+// Contexts
+
 const LayoutContext = createContext({});
 const ColorContext = createContext({});
 const PageContext = createContext([]);
+
+// Component
 
 const App = () => {
     const [page, setPage] = useState({});
@@ -46,14 +59,18 @@ const App = () => {
     );
 }
 
+// Exports
+
 export default App;
 
 export { ColorContext, LayoutContext, PageContext };
 
+// Styles
+
 const colors = {
     veryDark: "#000000",
     dark: "#0263E0",
-    light: "#0263E01F",
+    light: "#D5E7FF",
     veryLight: "#FFFFFF"
 }
 

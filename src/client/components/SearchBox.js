@@ -1,7 +1,18 @@
+/*
+David A. Clark, Jr.
+#0004796375
+WDV229 2208
+Portfolio Project
+*/
+
+// Imports
+
 import { RiSearchFill, RiArrowRightCircleFill } from "react-icons/ri";
 import { useContext } from "react";
 
 import { ColorContext } from "../app/App";
+
+// Component
 
 const SearchBox = props => {
     const colors = useContext(ColorContext);
@@ -21,6 +32,12 @@ const SearchBox = props => {
         </div>
     );
 };
+
+// Exports
+
+export default SearchBox;
+
+// Styles
 
 const styles = {
     search: colors => ({
@@ -55,5 +72,3 @@ const styles = {
         background: colors.veryLight
     })
 }
-
-export default SearchBox;
