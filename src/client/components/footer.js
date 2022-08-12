@@ -8,7 +8,7 @@ const Footer = () => {
 
     return (
         <footer style={styles.footer(layout.footer, colors)}>
-            <p>Hello from Footer!</p>
+            <p style={styles.title}>WDV2 Project - David A. Clark, Jr.</p>
         </footer>
     );
 };
@@ -20,9 +20,14 @@ const styles = {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
+        justifyContent: "center",
 
         ...layout,
 
         background: colors.light
-    })
+    }),
+
+    title: {
+        display: "flex"
+    }
 };

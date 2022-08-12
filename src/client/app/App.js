@@ -67,7 +67,7 @@ const layout = {
     },
 
     footer: {
-        height: "0.25in"
+        height: "0.5in"
     }
 };
 
