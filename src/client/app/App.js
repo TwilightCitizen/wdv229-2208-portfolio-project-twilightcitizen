@@ -19,7 +19,7 @@ const ColorContext = createContext({});
 const PageContext = createContext([]);
 
 const App = () => {
-    const [page, setPage] = useState();
+    const [page, setPage] = useState({});
 
     return (
         <div className="App" style={styles.app}>
