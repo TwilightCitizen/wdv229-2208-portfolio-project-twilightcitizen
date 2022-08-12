@@ -15,6 +15,8 @@ import { useContext, useEffect } from "react";
 
 const icon = style => <RiErrorWarningFill style={style}/>
 
+// Component
+
 const Error404 = () => {
     const [, setPage] = useContext(PageContext);
 
