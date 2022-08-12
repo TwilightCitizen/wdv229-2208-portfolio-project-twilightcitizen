@@ -1,14 +1,15 @@
 import { useContext } from "react";
 
-import { ColorContext, LayoutContext } from "../app/App";
+import { ColorContext, LayoutContext, PageContext } from "../app/App";
 
 const Header = () => {
     const colors = useContext(ColorContext)
     const layout = useContext(LayoutContext);
+    const [page,] = useContext(PageContext);
 
     return (
         <header style={styles.header(layout.header, colors)}>
-            <p>Hello from Header!</p>
+            <h1>{page}</h1>
         </header>
     );
 };
