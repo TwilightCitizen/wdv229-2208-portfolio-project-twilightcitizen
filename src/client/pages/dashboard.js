@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 const Dashboard = () => {
     return (
         <>
-        <p>Hello from Dashboard!</p>
+            <p>Hello from Dashboard!</p>
 
             <ul>
                 <li><NavLink to={"/detail"} title={"Detail"}>Detail</NavLink></li>
