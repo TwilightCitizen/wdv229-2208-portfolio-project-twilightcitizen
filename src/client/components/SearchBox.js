@@ -1,4 +1,4 @@
-const Search = () => {
+const SearchBox = () => {
     return (
         <form style={styles.search}>
             <label htmlFor={"search"}>Search</label>
@@ -7,9 +7,8 @@ const Search = () => {
     );
 };
 
-export default Search;
+export default SearchBox;
 
 const styles = {
-    marginLeft: "1in",
-    marginRight: "auto"
+    margin: "auto"
 };

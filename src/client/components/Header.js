@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { RiArrowGoBackFill } from "react-icons/ri";
 
 import { ColorContext, LayoutContext, PageContext } from "../app/App";
-import Search from "./Search"
+import SearchBox from "./SearchBox"
 
 const Header = () => {
     const colors = useContext(ColorContext)
@@ -26,7 +26,7 @@ const Header = () => {
         <header style={styles.header(layout.header, colors)}>
             {icon}
             <h1>{page.title}</h1>
-            <Search/>
+            <SearchBox/>
             {backNavigation(page.backNavigation)}
         </header>
     );
