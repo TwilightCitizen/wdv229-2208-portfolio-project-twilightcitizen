@@ -15,10 +15,12 @@ import User from "../pages/user"
 import Search from "../pages/search"
 
 const LayoutContext = createContext({});
+const ColorContext = createContext({});
 
 const App = () => {
     return (
         <div className="App" style={styles.app}>
+            <ColorContext.Provider value={colors}>
             <LayoutContext.Provider value={layout}>
                 <Header/>
 
@@ -34,13 +36,21 @@ const App = () => {
 
                 <Footer/>
             </LayoutContext.Provider>
+            </ColorContext.Provider>
         </div>
     );
 }
 
 export default App;
 
-export { LayoutContext };
+export { ColorContext, LayoutContext };
+
+const colors = {
+    veryDark: "#000000",
+    dark: "#0263E0",
+    light: "#0263E01F",
+    veryLight: "#FFFFFF"
+}
 
 const layout = {
     app: {
