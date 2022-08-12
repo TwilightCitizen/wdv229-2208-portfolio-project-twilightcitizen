@@ -8,7 +8,7 @@ const Footer = () => {
 
     return (
         <footer style={styles.footer(layout.footer, colors)}>
-            <p style={styles.title}>WDV2 Project - David A. Clark, Jr.</p>
+            <p style={styles.title}>WDV2 2208 Portfolio Project by David A. Clark, Jr.</p>
         </footer>
     );
 };
