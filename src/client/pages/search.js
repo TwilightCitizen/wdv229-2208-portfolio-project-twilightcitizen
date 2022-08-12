@@ -11,8 +11,13 @@ const Search = () => {
 
     useEffect(() => {
         setPage(() => ({
-            title: 'Search',
-            icon: icon
+            title: "Search",
+            icon: icon,
+
+            backNavigation: {
+                title: "Dashboard",
+                link: "/dashboard"
+            }
         }));
     }, [setPage]);
 

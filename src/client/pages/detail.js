@@ -11,15 +11,20 @@ const Detail = () => {
 
     useEffect(() => {
         setPage(() => ({
-            title: 'Detail',
-            icon: icon
+            title: "Chat",
+            icon: icon,
+            
+            backNavigation: {
+                title: "Dashboard",
+                link: "/dashboard"
+            }
         }));
     }, [setPage]);
 
     return (
         <>
             <p>Hello from Detail!</p>
-            <p><NavLink to={"/dashboard"} title={"Dashboard"}>Dashboard</NavLink></p>
+            <p><NavLink to={"/user"} title={"User"}>User</NavLink></p>
         </>
     );
 };

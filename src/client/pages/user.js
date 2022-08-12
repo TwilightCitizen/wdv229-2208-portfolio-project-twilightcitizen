@@ -1,4 +1,3 @@
-import { NavLink } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { RiUserFill } from "react-icons/ri";
 
@@ -11,15 +10,20 @@ const User = () => {
 
     useEffect(() => {
         setPage(() => ({
-            title: 'User',
-            icon: icon
+            title: "User",
+            icon: icon,
+
+
+            backNavigation: {
+                title: "Chat",
+                link: "/detail"
+            }
         }));
     }, [setPage]);
 
     return (
         <>
             <p>Hello from User!</p>
-            <p><NavLink to={"/dashboard"} title={"Dashboard"}>Dashboard</NavLink></p>
         </>
     );
 };
