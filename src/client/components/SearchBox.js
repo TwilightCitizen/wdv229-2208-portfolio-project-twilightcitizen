@@ -1,6 +1,6 @@
-const SearchBox = () => {
+const SearchBox = props => {
     return (
-        <form style={styles.search}>
+        <form style={props.style}>
             <label htmlFor={"search"}>Search</label>
             <input id={"search"} name={"search"} type={"text"}/>
         </form>
@@ -8,7 +8,3 @@ const SearchBox = () => {
 };
 
 export default SearchBox;
-
-const styles = {
-    margin: "auto"
-};

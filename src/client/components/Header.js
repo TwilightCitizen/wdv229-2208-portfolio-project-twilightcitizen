@@ -26,7 +26,7 @@ const Header = () => {
         <header style={styles.header(layout.header, colors)}>
             {icon}
             <h1>{page.title}</h1>
-            <SearchBox/>
+            <SearchBox style={styles.search}/>
             {backNavigation(page.backNavigation)}
         </header>
     );
@@ -51,6 +51,11 @@ const styles = {
         height: "0.75in",
         margin: "0.25in",
         width: "auto"
+    },
+
+    search: {
+        marginLeft: "auto",
+        marginRight: "0.25in",
     },
 
     backNavigation: {
