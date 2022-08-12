@@ -13,7 +13,6 @@ const User = () => {
             title: "User",
             icon: icon,
 
-
             backNavigation: {
                 title: "Chat",
                 link: "/detail"
