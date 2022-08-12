@@ -8,7 +8,7 @@ Portfolio Project
 // Imports
 
 import { RiSearchFill, RiArrowRightCircleFill } from "react-icons/ri";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 import { ColorContext } from "../app/App";
 
@@ -16,18 +16,28 @@ import { ColorContext } from "../app/App";
 
 const SearchBox = props => {
     const colors = useContext(ColorContext);
+    const [isLight, setIsLight] = useState(true);
+
+    const lighten = () => setIsLight(true);
+    const darken = () => setIsLight(false);
 
     return (
         <div style={{...props.style, ...styles.search(colors)}}>
-            <RiSearchFill style={styles.icon(colors)}/>
+            <RiSearchFill style={styles.searchIcon(colors)}/>
 
             <label htmlFor={"search"} style={styles.label}>Search</label>
             <input id={"search"} name={"search"} type={"text"} placeholder={"Search for Groups"} style={styles.field}/>
 
             <label htmlFor={"button"} style={styles.label}>Go</label>
 
-            <button id={"button"} name={"button"} style={styles.button(colors)}>
-                <RiArrowRightCircleFill style={styles.icon(colors)}/>
+            <button
+                id={"button"} name={"button"} style={styles.button(colors, isLight)}
+                onMouseOver={darken} onMouseOut={lighten}
+                onFocus={darken} onBlur={lighten}
+                onMouseDown={lighten} onMouseUp={darken}
+                onKeyDown={lighten} onKeyUp={darken}
+            >
+                <RiArrowRightCircleFill style={styles.goIcon(colors, isLight)}/>
             </button>
         </div>
     );
@@ -49,7 +59,7 @@ const styles = {
         borderRadius: "0.03125in"
     }),
 
-    icon: colors => ({
+    searchIcon: colors => ({
         height: "0.25in",
         width: "auto",
         background: colors.veryLight,
@@ -66,9 +76,17 @@ const styles = {
         width: "3in"
     },
 
-    button: colors => ({
+    button: (colors, isLight) => ({
         padding: "0",
         borderRadius: "100%",
-        background: colors.veryLight
-    })
+        background: colors.veryLight,
+        border: `1px solid ${isLight ? colors.light : colors.veryLight}`
+    }),
+
+    goIcon: (colors, isLight = false) => ({
+        height: "0.25in",
+        width: "auto",
+        background: colors.veryLight,
+        color: isLight? colors.light : colors.dark
+    }),
 }
