@@ -19,12 +19,8 @@ const Dashboard = () => {
     return (
         <>
             <p>Hello from Dashboard!</p>
-
-            <ul>
-                <li><NavLink to={"/detail"} title={"Detail"}>Detail</NavLink></li>
-                <li><NavLink to={"/user"} title={"User"}>User</NavLink></li>
-                <li><NavLink to={"/search"} title={"Search"}>Search</NavLink></li>
-            </ul>
+            <p><NavLink to={"/detail"} title={"Chat"}>Chat</NavLink></p>
+            <p><NavLink to={"/search"} title={"Search"}>Search</NavLink></p>
         </>
     );
 };
