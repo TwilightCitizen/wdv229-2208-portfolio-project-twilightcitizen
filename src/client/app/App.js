@@ -6,13 +6,13 @@ import {
 
 import { createContext, useState } from "react";
 
-import Header from "../components/header";
-import Footer from "../components/footer";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
-import Dashboard from "../pages/dashboard";
-import Detail from "../pages/detail";
-import User from "../pages/user"
-import Search from "../pages/search"
+import Dashboard from "../pages/Dashboard";
+import Detail from "../pages/Detail";
+import User from "../pages/User"
+import Search from "../pages/Search"
 
 const LayoutContext = createContext({});
 const ColorContext = createContext({});

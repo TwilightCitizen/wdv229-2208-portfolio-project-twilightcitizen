@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { RiArrowGoBackFill } from "react-icons/ri";
 
 import { ColorContext, LayoutContext, PageContext } from "../app/App";
-import Search from "../components/search"
+import Search from "./Search"
 
 const Header = () => {
     const colors = useContext(ColorContext)
