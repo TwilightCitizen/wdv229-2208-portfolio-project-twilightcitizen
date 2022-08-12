@@ -1,12 +1,20 @@
 import { NavLink } from "react-router-dom";
 import { useContext, useEffect } from "react";
+import { RiDashboardFill } from "react-icons/ri";
 
 import { PageContext } from "../app/App";
+
+const icon = style => <RiDashboardFill style={style}/>
 
 const Dashboard = () => {
     const [, setPage] = useContext(PageContext);
 
-    useEffect(() => { setPage(() => 'Dashboard'); });
+    useEffect(() => {
+        setPage(() => ({
+            title: 'Dashboard',
+            icon: icon
+        }));
+    }, [setPage]);
 
     return (
         <>
