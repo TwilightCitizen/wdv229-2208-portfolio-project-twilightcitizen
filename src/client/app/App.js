@@ -4,7 +4,7 @@ import {
     Route
 } from "react-router-dom";
 
-import { createContext } from "react";
+import { createContext, useState } from "react";
 
 import Header from "../components/header";
 import Footer from "../components/footer";
@@ -16,12 +16,16 @@ import Search from "../pages/search"
 
 const LayoutContext = createContext({});
 const ColorContext = createContext({});
+const PageContext = createContext([]);
 
 const App = () => {
+    const [page, setPage] = useState();
+
     return (
         <div className="App" style={styles.app}>
             <ColorContext.Provider value={colors}>
             <LayoutContext.Provider value={layout}>
+            <PageContext.Provider value={[page, setPage]}>
                 <Header/>
 
                 <div style={styles.content}>
@@ -35,6 +39,7 @@ const App = () => {
                 </div>
 
                 <Footer/>
+            </PageContext.Provider>
             </LayoutContext.Provider>
             </ColorContext.Provider>
         </div>
@@ -43,7 +48,7 @@ const App = () => {
 
 export default App;
 
-export { ColorContext, LayoutContext };
+export { ColorContext, LayoutContext, PageContext };
 
 const colors = {
     veryDark: "#000000",
