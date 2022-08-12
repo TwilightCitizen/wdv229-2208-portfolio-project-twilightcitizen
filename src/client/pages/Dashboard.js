@@ -12,7 +12,8 @@ const Dashboard = () => {
     useEffect(() => {
         setPage(() => ({
             title: 'Dashboard',
-            icon: icon
+            icon: icon,
+            showSearch: true
         }));
     }, [setPage]);
 

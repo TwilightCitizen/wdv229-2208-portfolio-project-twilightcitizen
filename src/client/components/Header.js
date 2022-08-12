@@ -26,7 +26,7 @@ const Header = () => {
         <header style={styles.header(layout.header, colors)}>
             {icon}
             <h1>{page.title}</h1>
-            <SearchBox style={styles.search}/>
+            {page.showSearch ? <SearchBox style={styles.search}/> : null}
             {backNavigation(page.backNavigation)}
         </header>
     );
