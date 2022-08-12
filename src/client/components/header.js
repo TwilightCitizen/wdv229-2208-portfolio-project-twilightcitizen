@@ -1,12 +1,13 @@
 import { useContext } from "react";
 
-import { LayoutContext } from "../app/App";
+import { ColorContext, LayoutContext } from "../app/App";
 
 const Header = () => {
+    const colors = useContext(ColorContext)
     const layout = useContext(LayoutContext);
 
     return (
-        <header style={styles.header(layout.header)}>
+        <header style={styles.header(layout.header, colors)}>
             <p>Hello from Header!</p>
         </header>
     );
@@ -15,10 +16,14 @@ const Header = () => {
 export default Header;
 
 const styles = {
-    header: layout => ({
+    header: (layout, colors) => ({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        ...layout
+
+        ...layout,
+
+        background: colors.dark,
+        color: colors.veryLight
     })
 };

@@ -1,12 +1,13 @@
 import { useContext } from "react";
 
-import { LayoutContext } from "../app/App";
+import { ColorContext, LayoutContext } from "../app/App";
 
 const Footer = () => {
+    const colors = useContext(ColorContext);
     const layout = useContext(LayoutContext);
 
     return (
-        <footer style={styles.footer(layout.footer)}>
+        <footer style={styles.footer(layout.footer, colors)}>
             <p>Hello from Footer!</p>
         </footer>
     );
@@ -15,10 +16,13 @@ const Footer = () => {
 export default Footer;
 
 const styles = {
-    footer: layout => ({
+    footer: (layout, colors) => ({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        ...layout
+
+        ...layout,
+
+        background: colors.light
     })
 };
