@@ -1,6 +1,13 @@
 import { NavLink } from "react-router-dom";
+import { useContext, useEffect } from "react";
+
+import { PageContext } from "../app/App";
 
 const Dashboard = () => {
+    const [, setPage] = useContext(PageContext);
+
+    useEffect(() => { setPage(() => 'Dashboard'); });
+
     return (
         <>
             <p>Hello from Dashboard!</p>
