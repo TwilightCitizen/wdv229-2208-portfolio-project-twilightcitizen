@@ -25,7 +25,7 @@ const SearchBox = props => {
 
     const onSearchTextChange = value => {
         setSearchText(value);
-        setIsDisabled(searchText === '');
+        setIsDisabled(value === '');
     };
 
     return (
