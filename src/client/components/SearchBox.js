@@ -17,16 +17,29 @@ import { ColorContext } from "../app/App";
 const SearchBox = props => {
     const colors = useContext(ColorContext);
     const [isLight, setIsLight] = useState(true);
+    const [isDisabled, setIsDisabled] = useState(true);
+    const [searchText, setSearchText] = useState("");
 
-    const lighten = () => setIsLight(true);
-    const darken = () => setIsLight(false);
+    const lighten = () => { if (isDisabled) return; setIsLight(true); }
+    const darken = () => { if (isDisabled) return; setIsLight(false); }
+
+    const onSearchTextChange = value => {
+        setSearchText(value);
+        setIsDisabled(searchText === '');
+    };
 
     return (
         <div style={{...props.style, ...styles.search(colors)}}>
             <RiSearchFill style={styles.searchIcon(colors)}/>
 
             <label htmlFor={"search"} style={styles.label}>Search</label>
-            <input id={"search"} name={"search"} type={"text"} placeholder={"Search for Groups"} style={styles.field}/>
+
+            <input
+                id={"search"} name={"search"}
+                type={"text"} placeholder={"Search for Groups"}
+                style={styles.field}
+                onChange={event => onSearchTextChange(event.target.value)}
+            />
 
             <label htmlFor={"button"} style={styles.label}>Go</label>
 
@@ -36,6 +49,7 @@ const SearchBox = props => {
                 onFocus={darken} onBlur={lighten}
                 onMouseDown={lighten} onMouseUp={darken}
                 onKeyDown={lighten} onKeyUp={darken}
+                disabled={isDisabled}
             >
                 <RiArrowRightCircleFill style={styles.goIcon(colors, isLight)}/>
             </button>
