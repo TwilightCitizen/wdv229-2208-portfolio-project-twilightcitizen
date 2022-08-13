@@ -34,7 +34,6 @@ const Dashboard = () => {
         <>
             <p>Hello from Dashboard!</p>
             <p><NavLink to={"/detail"} title={"Chat"}>Chat</NavLink></p>
-            <p><NavLink to={"/search"} title={"Search"}>Search</NavLink></p>
         </>
     );
 };
