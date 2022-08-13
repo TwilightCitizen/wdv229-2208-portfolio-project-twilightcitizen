@@ -11,27 +11,27 @@ import { RiSearchFill, RiArrowRightCircleFill } from "react-icons/ri";
 import { useContext, useState } from "react";
 
 import { ColorContext } from "../app/App";
+import IconButton from "./IconButton";
+
+// Constants
+
+const buttonIcon = style => <RiArrowRightCircleFill style={style}/>;
 
 // Component
 
 const SearchBox = props => {
     const colors = useContext(ColorContext);
-    const [isLight, setIsLight] = useState(true);
-    const [isDisabled, setIsDisabled] = useState(true);
     const [searchText, setSearchText] = useState("");
-
-    const lighten = () => { if (isDisabled) return; setIsLight(true); }
-    const darken = () => { if (isDisabled) return; setIsLight(false); }
+    const [buttonDisabled, setButtonDisabled] = useState(true);
 
     const onSearchTextChange = value => {
         setSearchText(value);
-        setIsDisabled(value === '');
+        setButtonDisabled(value === "");
     };
 
     return (
         <div style={{...props.style, ...styles.search(colors)}}>
             <RiSearchFill style={styles.searchIcon(colors)}/>
-
             <label htmlFor={"search"} style={styles.label}>Search</label>
 
             <input
@@ -41,18 +41,12 @@ const SearchBox = props => {
                 onChange={event => onSearchTextChange(event.target.value)}
             />
 
-            <label htmlFor={"button"} style={styles.label}>Go</label>
-
-            <button
-                id={"button"} name={"button"} style={styles.button(colors, isLight)}
-                onMouseOver={darken} onMouseOut={lighten}
-                onFocus={darken} onBlur={lighten}
-                onMouseDown={lighten} onMouseUp={darken}
-                onKeyDown={lighten} onKeyUp={darken}
-                disabled={isDisabled}
-            >
-                <RiArrowRightCircleFill style={styles.goIcon(colors, isLight)}/>
-            </button>
+            <IconButton
+                light={true}
+                disabled={buttonDisabled}
+                label={"Go"}
+                icon={buttonIcon}
+            />
         </div>
     );
 };
@@ -88,19 +82,5 @@ const styles = {
     field: {
         border: "none",
         width: "3in"
-    },
-
-    button: (colors, isLight) => ({
-        padding: "0",
-        borderRadius: "100%",
-        background: colors.veryLight,
-        border: `1px solid ${isLight ? colors.light : colors.veryLight}`
-    }),
-
-    goIcon: (colors, isLight = false) => ({
-        height: "0.25in",
-        width: "auto",
-        background: colors.veryLight,
-        color: isLight? colors.light : colors.dark
-    }),
+    }
 }
