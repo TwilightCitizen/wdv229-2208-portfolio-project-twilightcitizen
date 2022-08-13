@@ -30,6 +30,7 @@ const IconButton = props => {
                 onFocus={darken} onBlur={lighten}
                 onMouseDown={lighten} onMouseUp={darken}
                 onKeyDown={lighten} onKeyUp={darken}
+                onClick={props.onClick}
                 disabled={props.disabled}
             >
                 {props.icon(styles.icon(colors, light))}
