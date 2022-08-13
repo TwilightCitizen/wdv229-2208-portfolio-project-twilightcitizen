@@ -7,7 +7,6 @@ Portfolio Project
 
 // Imports
 
-import { NavLink } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { RiDashboardFill } from "react-icons/ri";
 
