@@ -11,7 +11,8 @@ import { NavLink } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { RiDashboardFill } from "react-icons/ri";
 
-import { PageContext } from "../app/App";
+import { PageContext, LayoutContext } from "../app/App";
+import ChatList from "../components/ChatList";
 
 // Constants
 
@@ -21,20 +22,21 @@ const icon = style => <RiDashboardFill style={style}/>
 
 const Dashboard = () => {
     const [, setPage] = useContext(PageContext);
+    const layout = useContext(LayoutContext);
 
     useEffect(() => {
         setPage(() => ({
-            title: 'Dashboard',
+            title: "Dashboard",
             icon: icon,
             showSearch: true
         }));
     }, [setPage]);
 
     return (
-        <>
-            <p>Hello from Dashboard!</p>
-            <p><NavLink to={"/detail"} title={"Chat"}>Chat</NavLink></p>
-        </>
+        <div style={styles.dashboard(layout.page)}>
+            <ChatList title={"Group Chats"} chats={groupChats}/>
+            <ChatList title={"Private Chats"} chats={privateChats}/>
+        </div>
     );
 };
 
@@ -43,3 +45,58 @@ const Dashboard = () => {
 export default Dashboard;
 
 // Styles
+
+const styles = {
+    dashboard: layout => ({
+        display: "flex",
+        flexDirection: "column",
+        flexWrap: "wrap",
+
+        ...layout
+    })
+}
+
+// Mock Data
+
+const privateChats = [
+    {
+        jid: "kikteam@talk.kik.com",
+        username: "kikteam",
+        displayName: "Kik Team"
+    }, {
+        jid: "fakeuser1@talk.kik.com",
+        username: "fakeuser1",
+        displayName: "Fake User 1"
+    }, {
+        jid: "fakeuser1@talk.kik.com",
+        username: "fakeuser1",
+        displayName: "Fake User 2"
+    }, {
+        jid: "fakeuser1@talk.kik.com",
+        username: "fakeuser1",
+        displayName: "Fake User 3"
+    }, {
+        jid: "fakeuser1@talk.kik.com",
+        username: "fakeuser1",
+        displayName: "Fake User 4"
+    }
+];
+
+const groupChats = [
+    {
+        jid: "1234567891_g@groups.kik.com",
+        displayName: "Fake Group 1"
+    }, {
+        jid: "1234567892_g@groups.kik.com",
+        displayName: "Fake Group 2"
+    }, {
+        jid: "1234567893_g@groups.kik.com",
+        displayName: "Fake Group 3"
+    }, {
+        jid: "1234567894_g@groups.kik.com",
+        displayName: "Fake Group 4"
+    }, {
+        jid: "1234567895_g@groups.kik.com",
+        displayName: "Fake Group 5"
+    },
+];
