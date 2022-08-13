@@ -29,17 +29,20 @@ import Error404 from "../pages/Error404";
 const LayoutContext = createContext({});
 const ColorContext = createContext({});
 const PageContext = createContext([]);
+const SearchContext = createContext([]);
 
 // Component
 
 const App = () => {
     const [page, setPage] = useState({});
+    const [search, setSearch] = useState("")
 
     return (
         <div className="App" style={styles.app}>
             <ColorContext.Provider value={colors}>
             <LayoutContext.Provider value={layout}>
             <PageContext.Provider value={[page, setPage]}>
+            <SearchContext.Provider value={[search, setSearch]}>
                 <Header/>
 
                 <div style={styles.content}>
@@ -48,13 +51,16 @@ const App = () => {
                         <Route path="/dashboard" element={<Dashboard/>}/>
                         <Route path="/detail" element={<Detail/>}/>
                         <Route path="/user" element={<User/>}/>
-                        <Route path="/search" element={<Search/>}/>
+
+                        { search !== "" && <Route path="/search" element={<Search/>}/> }
+
                         <Route path="/error-404" element={<Error404/>}/>
                         <Route path="*" element={<Navigate to="/error-404" replace/>}/>
                     </Routes>
                 </div>
 
                 <Footer/>
+            </SearchContext.Provider>
             </PageContext.Provider>
             </LayoutContext.Provider>
             </ColorContext.Provider>
@@ -66,7 +72,7 @@ const App = () => {
 
 export default App;
 
-export { ColorContext, LayoutContext, PageContext };
+export { ColorContext, LayoutContext, PageContext, SearchContext };
 
 // Styles
 
