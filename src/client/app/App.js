@@ -85,7 +85,11 @@ const colors = {
 
 const layout = {
     app: {
-        minHeight: "100vh"
+        minHeight: "100vh",
+    },
+
+    page: {
+        padding: "0.25in"
     },
 
     header: {
