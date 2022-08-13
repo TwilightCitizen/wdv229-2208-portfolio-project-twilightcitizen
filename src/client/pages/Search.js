@@ -7,11 +7,10 @@ Portfolio Project
 
 // Imports
 
-import { NavLink } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { RiSearchFill } from "react-icons/ri";
 
-import { PageContext } from "../app/App";
+import { PageContext, SearchContext } from "../app/App";
 
 // Constants
 
@@ -21,6 +20,8 @@ const icon = style => <RiSearchFill style={style}/>
 
 const Search = () => {
     const [, setPage] = useContext(PageContext);
+    const [search, setSearch] = useContext(SearchContext);
+    const searchTerms = search;
 
     useEffect(() => {
         setPage(() => ({
@@ -32,12 +33,13 @@ const Search = () => {
                 link: "/dashboard"
             }
         }));
+
+        return () => { setSearch(""); };
     }, [setPage]);
 
     return (
         <>
-            <p>Hello from Search!</p>
-            <p><NavLink to={"/dashboard"} title={"Dashboard"}>Dashboard</NavLink></p>
+            <p>You searched for {searchTerms}</p>
         </>
     );
 };
