@@ -9,8 +9,9 @@ Portfolio Project
 
 import { RiSearchFill, RiArrowRightCircleFill } from "react-icons/ri";
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { ColorContext } from "../app/App";
+import { ColorContext, SearchContext } from "../app/App";
 import IconButton from "./IconButton";
 
 // Constants
@@ -21,12 +22,19 @@ const buttonIcon = style => <RiArrowRightCircleFill style={style}/>;
 
 const SearchBox = props => {
     const colors = useContext(ColorContext);
+    const [,setSearch] = useContext(SearchContext);
     const [searchText, setSearchText] = useState("");
     const [buttonDisabled, setButtonDisabled] = useState(true);
+    const navigate = useNavigate()
 
     const onSearchTextChange = value => {
         setSearchText(value);
         setButtonDisabled(value === "");
+    };
+
+    const onButtonClick = () => {
+        setSearch(searchText);
+        navigate("/search");
     };
 
     return (
@@ -46,6 +54,7 @@ const SearchBox = props => {
                 disabled={buttonDisabled}
                 label={"Go"}
                 icon={buttonIcon}
+                onClick={onButtonClick}
             />
         </div>
     );
