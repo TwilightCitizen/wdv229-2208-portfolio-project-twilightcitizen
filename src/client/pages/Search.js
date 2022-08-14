@@ -25,7 +25,7 @@ const Search = () => {
 
     useEffect(() => {
         setPage(() => ({
-            title: "Search",
+            title: `Search for "${searchTerms}"`,
             icon: icon,
 
             backNavigation: {
