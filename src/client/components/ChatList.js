@@ -8,12 +8,17 @@ Portfolio Project
 // Imports
 
 import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+
+import { ChatContext } from "../app/App";
 
 // Component
 
 const ChatList = props => {
+    const [,setChat] = useContext(ChatContext);
+
     const chats = props.chats.map((element, index) => {
-        const onClick = () => console.log("clicked");
+        const onClick = () => { setChat(element); };
 
         return (
             <li style={styles.chat} key={index}>
