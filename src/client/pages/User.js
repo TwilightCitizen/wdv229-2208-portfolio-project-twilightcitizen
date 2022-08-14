@@ -10,7 +10,7 @@ Portfolio Project
 import { useContext, useEffect } from "react";
 import { RiUserFill } from "react-icons/ri";
 
-import { PageContext } from "../app/App";
+import { PageContext, ChatContext } from "../app/App";
 
 // Constants
 
@@ -20,6 +20,7 @@ const icon = style => <RiUserFill style={style}/>
 
 const User = () => {
     const [, setPage] = useContext(PageContext);
+    const [chat, setChat] = useContext(ChatContext);
 
     useEffect(() => {
         setPage(() => ({
@@ -31,12 +32,12 @@ const User = () => {
                 link: "/detail"
             }
         }));
-    }, [setPage]);
+
+        setChat(chat);
+    }, [setPage, chat, setChat]);
 
     return (
-        <>
-            <p>Hello from User!</p>
-        </>
+        <p>Hello from User!</p>
     );
 };
 
