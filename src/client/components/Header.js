@@ -16,7 +16,7 @@ import IconNavLink from "./IconNavLink";
 
 // Constants
 
-const backNavigationIcon = style => <RiArrowGoBackFill style={style}/>
+const backNavigationIcon = style => <RiArrowGoBackFill style={style}/>;
 
 // Component
 
