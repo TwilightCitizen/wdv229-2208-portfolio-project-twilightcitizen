@@ -12,10 +12,11 @@ Portfolio Project
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 
-import { ChatContext } from "../app/App";
+import { ChatContext, UserContext } from "../app/App";
 
 const ChatDetail = props => {
     const [, setChat] = useContext(ChatContext);
+    const [, setUser] = useContext(UserContext);
 
     return (
         <div style={styles.chatDetail(props.detail.event)}>
@@ -25,7 +26,11 @@ const ChatDetail = props => {
                 to={"/user"}
                 title={props.detail.user.displayName}
                 style={styles.user}
-                onClick={() => setChat(props.chat)}
+
+                onClick={() => {
+                    setChat(props.chat);
+                    setUser(props.detail.user)
+                }}
             >
                 {props.detail.user.displayName}
             </NavLink>
