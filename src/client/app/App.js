@@ -31,6 +31,7 @@ const ColorContext = createContext({});
 const PageContext = createContext([]);
 const SearchContext = createContext([]);
 const ChatContext = createContext([]);
+const UserContext = createContext([]);
 
 // Component
 
@@ -38,6 +39,7 @@ const App = () => {
     const [page, setPage] = useState({});
     const [search, setSearch] = useState("")
     const [chat, setChat] = useState({});
+    const [user, setUser] = useState({});
 
     return (
         <div className="App" style={styles.app}>
@@ -46,6 +48,7 @@ const App = () => {
             <PageContext.Provider value={[page, setPage]}>
             <SearchContext.Provider value={[search, setSearch]}>
             <ChatContext.Provider value={[chat, setChat]}>
+            <UserContext.Provider value={[user, setUser]}>
                 <Header/>
 
                 <div style={styles.content}>
@@ -53,7 +56,7 @@ const App = () => {
                         <Route path="/" element={<Navigate to="/dashboard" replace/>}/>
                         <Route path="/dashboard" element={<Dashboard/>}/>
                         { Object.keys(chat).length !== 0 && <Route path="/detail" element={<Detail/>}/> }
-                        <Route path="/user" element={<User/>}/>
+                        { Object.keys(user).length !== 0 && <Route path="/user" element={<User/>}/> }
                         { search !== "" && <Route path="/search" element={<Search/>}/> }
                         <Route path="/error-404" element={<Error404/>}/>
                         <Route path="*" element={<Navigate to="/error-404" replace/>}/>
@@ -61,6 +64,7 @@ const App = () => {
                 </div>
 
                 <Footer/>
+            </UserContext.Provider>
             </ChatContext.Provider>
             </SearchContext.Provider>
             </PageContext.Provider>
@@ -79,7 +83,8 @@ export {
     LayoutContext,
     PageContext,
     SearchContext,
-    ChatContext
+    ChatContext,
+    UserContext
 };
 
 // Styles
