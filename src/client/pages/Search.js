@@ -34,7 +34,7 @@ const Search = () => {
             }
         }));
 
-        return () => { setSearch(""); };
+        return () => setSearch("");
     }, [setPage]);
 
     return (

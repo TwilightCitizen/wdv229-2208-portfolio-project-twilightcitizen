@@ -30,12 +30,14 @@ const LayoutContext = createContext({});
 const ColorContext = createContext({});
 const PageContext = createContext([]);
 const SearchContext = createContext([]);
+const ChatContext = createContext([]);
 
 // Component
 
 const App = () => {
     const [page, setPage] = useState({});
     const [search, setSearch] = useState("")
+    const [chat, setChat] = useState({});
 
     return (
         <div className="App" style={styles.app}>
@@ -43,23 +45,23 @@ const App = () => {
             <LayoutContext.Provider value={layout}>
             <PageContext.Provider value={[page, setPage]}>
             <SearchContext.Provider value={[search, setSearch]}>
+            <ChatContext.Provider value={[chat, setChat]}>
                 <Header/>
 
                 <div style={styles.content}>
                     <Routes>
                         <Route path="/" element={<Navigate to="/dashboard" replace/>}/>
                         <Route path="/dashboard" element={<Dashboard/>}/>
-                        <Route path="/detail" element={<Detail/>}/>
+                        { Object.keys(chat).length !== 0 && <Route path="/detail" element={<Detail/>}/> }
                         <Route path="/user" element={<User/>}/>
-
                         { search !== "" && <Route path="/search" element={<Search/>}/> }
-
                         <Route path="/error-404" element={<Error404/>}/>
                         <Route path="*" element={<Navigate to="/error-404" replace/>}/>
                     </Routes>
                 </div>
 
                 <Footer/>
+            </ChatContext.Provider>
             </SearchContext.Provider>
             </PageContext.Provider>
             </LayoutContext.Provider>
@@ -72,7 +74,13 @@ const App = () => {
 
 export default App;
 
-export { ColorContext, LayoutContext, PageContext, SearchContext };
+export {
+    ColorContext,
+    LayoutContext,
+    PageContext,
+    SearchContext,
+    ChatContext
+};
 
 // Styles
 
@@ -85,7 +93,11 @@ const colors = {
 
 const layout = {
     app: {
-        minHeight: "100vh"
+        minHeight: "100vh",
+    },
+
+    page: {
+        padding: "0.25in"
     },
 
     header: {
