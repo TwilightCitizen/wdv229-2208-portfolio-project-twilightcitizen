@@ -36,9 +36,48 @@ Each week I will summarize my milestone activity and progress by writing a stand
 
 For this milestone you will have created a wireframe prototype in Figma.  Post your link here, so you have easy access to it.
 
+[Figma Prototype](https://www.figma.com/file/P3NPaVkSrDhnaswTjLOySg/Prototype?node-id=10%3A100)
+
 ### Milestone 2
 
-My next stand up will go here...
+⚙️ Overview - What I worked on this past week
+
+Feature Development:
+
+- Required Pages with Routing (Dashboard, Detail, User, and Search)
+- Additional Error404 Page for Unhandled Routing Requests
+- Necessary Components (Header, Footer, ChatList, ChatDetail, SearchBox, IconButton, and IconNavLink)
+- Thematic Layout and Color Styling consistent with Prototype
+- Context-Dependent Routing to Prevent Navigation Not Initiated within the App
+- Mock Data to Support Demonstrating Functionality
+
+Other Preparations:
+
+- Hosted an edited fork of [Yassien's Kik Node API](https://github.com/YassienW/kik-node-api) on GitHub
+- Double-checked basic Kik Bot functionality previously developed in spare time to help format mock data (above).
+
+<br>
+🌵 Challenges - What problems did I have & how I'm addressing them
+
+Establishing a working GitHub Kanban Project in the ePortfolio organization and associating it with my code repository proved challenging.  Lab Tech and Instructor involvement was necessary to overcome the issue.
+
+<br>
+🏆 Accomplishments - What is something I "leveled up" on this week
+
+- Emulated the prototype in the React front-end relatively faithfully
+- Applied arguably better color theme than in previous Web Dev projects
+- Most sophisticated React front-end developed in a single week
+
+<br>
+🔮 Next Steps - What I plan to prioritize and do next
+
+- Express back-end with RESTful API to serve Kik chat data payloads to front-end
+- MongoDB database to persistently store chat history
+- Kik Node API bot to aggregate chat history and/or fulfill requests not served from the database
+- Refactor front-end to use useFetch to request chat data payloads from back-end rather than using mock data
+- Use Concurrently for concurrently starting back-end and front-end servers
+
+<br>
 
 ### Milestone 3
 
