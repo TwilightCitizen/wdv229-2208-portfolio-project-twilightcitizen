@@ -68,15 +68,15 @@ const privateChats = [
         displayName: "Fake User 1"
     }, {
         jid: "fakeuser1@talk.kik.com",
-        username: "fakeuser1",
+        username: "fakeuser2",
         displayName: "Fake User 2"
     }, {
         jid: "fakeuser1@talk.kik.com",
-        username: "fakeuser1",
+        username: "fakeuser3",
         displayName: "Fake User 3"
     }, {
         jid: "fakeuser1@talk.kik.com",
-        username: "fakeuser1",
+        username: "fakeuser4",
         displayName: "Fake User 4"
     }
 ];
