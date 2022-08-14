@@ -17,6 +17,7 @@ import IconButton from "./IconButton";
 // Constants
 
 const buttonIcon = style => <RiArrowRightCircleFill style={style}/>;
+const searchPattern = /^[0-9a-zA-Z]+$/;
 
 // Component
 
@@ -28,8 +29,14 @@ const SearchBox = props => {
     const navigate = useNavigate()
 
     const onSearchTextChange = value => {
+        if (!value.match(searchPattern)) {
+            setButtonDisabled(true);
+
+            return;
+        }
+
         setSearchText(value);
-        setButtonDisabled(value === "");
+        setButtonDisabled(false);
     };
 
     const onButtonClick = () => {
