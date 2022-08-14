@@ -27,7 +27,9 @@ const Detail = () => {
     const isGroup = selectedChat.jid.split("@")[1].split(".")[0] === "groups";
 
     const chatDetails = (isGroup ? groupChatEvents : privateChatEvents(selectedChat))
-        .map((chatDetail, index) => <ChatDetail detail={chatDetail} key={index}/>);
+        .map((chatDetail, index) =>
+            <ChatDetail detail={chatDetail} chat={selectedChat} key={index}/>
+        );
 
     useEffect(() => {
         setPage(() => ({
