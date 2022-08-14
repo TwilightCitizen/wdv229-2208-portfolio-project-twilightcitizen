@@ -40,7 +40,7 @@ const Search = () => {
         }));
 
         return () => setSearch("");
-    }, [setPage]);
+    }, [setPage, setSearch, searchTerms]);
 
     return (
         <div style={styles.search(layout.page)}>
