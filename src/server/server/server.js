@@ -9,25 +9,57 @@ Portfolio Project
 
 const http = require("http");
 const dotenv = require("dotenv");
+const mongoose = require("mongoose");
 
 // Configuration
 
 dotenv.config();
 
-// Environment
+// Constants
 
 const serverPort = process.env.SERVER_PORT;
+const serverUp = `Server is up on port ${serverPort}.`;
+const serverDown = "Server is down.";
 
-// Service
+const mongoDbUrl = process.env.MONGO_DB_URL;
+const mongoDbConnection = `MongoDB connected to ${mongoDbUrl}`;
 
-http.createServer((request, response) => {
-    const message = `Service listening on port ${serverPort}.`;
+const mongoDBConnectionError = errorMessage =>
+    `MongoDB failed or lost connection to ${mongoDbUrl}: ${errorMessage ?? "Unspecified Error"}`;
 
-    console.log(message);
+// Server
 
-    response.writeHead(200, { 'Content-Type': 'application/json' });
+const server = http.createServer((request, response) => {
+    response.writeHead(200, { "Content-Type": "application/json" });
 
     response.end(JSON.stringify({
-        message: message
+        message: serverUp
     }));
-}).listen( serverPort );
+});
+
+// Server Events
+
+server.on("close", () => console.error(serverDown));
+
+// Database
+
+mongoose.connect(mongoDbUrl).catch(error =>
+    console.error(mongoDBConnectionError(error.message))
+);
+
+// Database Events
+
+mongoose.connection.on("connected", () => {
+    console.log(mongoDbConnection);
+    server.listen( serverPort, () => console.log(serverUp));
+});
+
+mongoose.connection.on("disconnected", () => {
+    console.error(mongoDBConnectionError());
+    server.close();
+});
+
+mongoose.connection.on("error", error => {
+    console.error(mongoDBConnectionError(error.message));
+    server.close();
+});
