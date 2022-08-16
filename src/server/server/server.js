@@ -20,6 +20,14 @@ const serverPort = process.env.SERVER_PORT;
 
 // Service
 
-http.createServer().listen( serverPort, () =>
-    console.log(`Service listening on port ${serverPort}.`)
-);
+http.createServer((request, response) => {
+    const message = `Service listening on port ${serverPort}.`;
+
+    console.log(message);
+
+    response.writeHead(200, { 'Content-Type': 'application/json' });
+
+    response.end(JSON.stringify({
+        message: message
+    }));
+}).listen( serverPort );
