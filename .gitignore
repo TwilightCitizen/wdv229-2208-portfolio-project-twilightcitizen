@@ -115,3 +115,8 @@ dist
 
 # misc
 .DS_Store
+
+# Kik Bot files
+/sessions
+/logs
+/images
