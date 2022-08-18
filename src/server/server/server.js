@@ -10,6 +10,7 @@ Portfolio Project
 const http = require("http");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const { kikBot, registerEvents } = require("../bot/kikBot");
 
 // Configuration
 
@@ -26,6 +27,9 @@ const mongoDbConnection = `MongoDB connected to ${mongoDbUrl}`;
 
 const mongoDBConnectionError = errorMessage =>
     `MongoDB failed or lost connection to ${mongoDbUrl}: ${errorMessage ?? "Unspecified Error"}`;
+
+const kikBotUsername = process.env.KIK_BOT_USERNAME;
+const kikBotPassword = process.env.KIK_BOT_PASSWORD;
 
 // Server
 
@@ -51,15 +55,19 @@ mongoose.connect(mongoDbUrl).catch(error =>
 
 mongoose.connection.on("connected", () => {
     console.log(mongoDbConnection);
+    registerEvents(kikBot);
+    kikBot.authenticate(kikBotUsername, kikBotPassword);
     server.listen( serverPort, () => console.log(serverUp));
 });
 
 mongoose.connection.on("disconnected", () => {
     console.error(mongoDBConnectionError());
+    kikBot.connection.disconnect();
     server.close();
 });
 
 mongoose.connection.on("error", error => {
     console.error(mongoDBConnectionError(error.message));
+    kikBot.connection.disconnect();
     server.close();
 });
