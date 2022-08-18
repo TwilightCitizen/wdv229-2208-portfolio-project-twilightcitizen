@@ -25,6 +25,12 @@ const user = mongoose.Schema({
     displayName: {
         type: String,
         required: true
+    },
+
+    isFriend: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 });
 
