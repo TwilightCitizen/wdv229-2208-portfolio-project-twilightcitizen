@@ -14,8 +14,8 @@ const mongoose = require("mongoose");
 const chatEvent = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
 
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
+    userId: {
+        type: String,
         ref: "User",
         required: true
     },
@@ -37,8 +37,8 @@ const chatEvent = mongoose.Schema({
         default: ""
     },
 
-    group: {
-        type: mongoose.Schema.Types.ObjectId,
+    groupId: {
+        type: String,
         ref: "Group",
         required: false,
     }

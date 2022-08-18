@@ -12,9 +12,7 @@ const mongoose = require("mongoose");
 // Constants
 
 const user = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
-
-    jid: {
+    _id: {
         type: String,
         required: true
     },
