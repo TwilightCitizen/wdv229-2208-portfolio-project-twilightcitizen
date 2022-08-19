@@ -19,7 +19,7 @@ const group = mongoose.Schema({
 
     hashTag: {
         type: String,
-        required: true
+        required: false
     },
 
     displayName: {
