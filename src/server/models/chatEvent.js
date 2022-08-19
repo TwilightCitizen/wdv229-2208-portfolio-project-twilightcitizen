@@ -33,8 +33,7 @@ const chatEvent = mongoose.Schema({
 
     content: {
         type: String,
-        required: true,
-        default: ""
+        required: false
     },
 
     groupId: {
