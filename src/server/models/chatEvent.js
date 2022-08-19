@@ -21,9 +21,9 @@ const chatEvent = mongoose.Schema({
     },
 
     timeStamp: {
-        type: Date,
+        type: String,
         required: true,
-        default: (new Date()).toISOString().replace(/T/,", ").slice(0, -8)
+        default: () => (new Date()).toISOString().replace(/T/,", ").slice(0, -5)
     },
 
     event: {
