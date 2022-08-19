@@ -27,6 +27,11 @@ const user = mongoose.Schema({
         required: true
     },
 
+    profilePic: {
+        type: String,
+        required: false
+    },
+
     isFriend: {
         type: Boolean,
         required: true,
