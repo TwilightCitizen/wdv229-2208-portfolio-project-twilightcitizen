@@ -11,7 +11,7 @@ Portfolio Project
 const KikClient = require("kik-node-api");
 const mongoose = require("mongoose");
 const User = require("../models/user");
-const ChatEvent = require("../models/chatEvent");
+const { PrivateChatEvent, GroupChatEvent } = require("../models/chatEvent");
 const Group = require("../models/group");
 const dotenv = require("dotenv");
 
@@ -110,15 +110,26 @@ const saveUsers = (users, isFriend = false) => {
     });
 };
 
-const saveChatEvent = (userId, eventStr, content, groupId) => {
-    const newChatEvent = new ChatEvent({
-        _id: mongoose.Types.ObjectId(),
-        userId: userId,
-        event: eventStr,
+const isUserId = userOrGroupId =>
+    userOrGroupId.split("@")[1] === "talk.kik.com"
 
-        ...(content && { content: content}),
-        ...(groupId && { groupId: groupId})
-    });
+const saveChatEvent = (fromUserId, eventStr, content, toUserOrGroupId) => {
+    const common = {
+        _id: mongoose.Types.ObjectId(),
+        fromUser: fromUserId,
+        event: eventStr,
+    };
+
+    const newChatEvent = isUserId(toUserOrGroupId) ?
+        new PrivateChatEvent({
+            ...common,
+
+            toUser: toUserOrGroupId
+        }) : new GroupChatEvent({
+            ...common,
+
+            toGroup: toUserOrGroupId
+        });
 
     newChatEvent
         .save()
@@ -143,11 +154,11 @@ const handlePrivateReceive = (userId, eventStr, it) => {
     console.log("Adding User as Friend");
     kikBot.addFriend(userId);  // TODO: Capture Peer Info for Saving
     console.log(`Saving Private ${eventStr}.`);
-    saveChatEvent(userId, eventStr, it, null);
+    saveChatEvent(userId, eventStr, it, kikBotId);
     console.log(`Echoing ${eventStr} Back`);
     kikBot.sendMessage(userId, it)
     console.log(`Saving ${eventStr} Back.`);
-    saveChatEvent(kikBotId, eventStr, it, null);
+    saveChatEvent(kikBotId, eventStr, it, userId);
 };
 
 // Kik Bot Events
