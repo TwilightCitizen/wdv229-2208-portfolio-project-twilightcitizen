@@ -38,22 +38,6 @@ const kikBot = new KikClient({
 
 // Kik Bot Database Operations
 
-const clearGroups = () => {
-    Group
-        .deleteMany()
-        .exec()
-        .then(result => console.log(`Cleared ${result.deletedCount} Groups.`))
-        .catch(error => console.error(`Error Clearing Users: ${error.message}`));
-};
-
-const clearUsers = () => {
-    User
-        .deleteMany()
-        .exec()
-        .then(result => console.log(`Cleared ${result.deletedCount} Users.`))
-        .catch(error => console.error(`Error Clearing Users: ${error.message}`));
-};
-
 const saveGroups = groups => {
     groups.forEach(group => {
         const newGroup = {
@@ -152,7 +136,7 @@ const handleGroupReceive = (userId, eventStr, it, groupId) => {
 const handlePrivateReceive = (userId, eventStr, it) => {
     console.log(`Received Private ${eventStr} from ${userId}: ${it}`);
     console.log("Adding User as Friend");
-    kikBot.addFriend(userId);  // TODO: Capture Peer Info for Saving
+    kikBot.addFriend(userId);
     console.log(`Saving Private ${eventStr}.`);
     saveChatEvent(userId, eventStr, it, kikBotId);
     console.log(`Echoing ${eventStr} Back`);
@@ -168,10 +152,6 @@ const registerEvents = kikBot => {
 
     kikBot.on("authenticated", () => {
         console.log("Authenticated.");
-        console.log("Clearing Groups.");
-        clearGroups();
-        console.log("Clearing Users.");
-        clearUsers();
     });
 
     kikBot.on("receivedroster", (groups, friends) => {
@@ -187,12 +167,6 @@ const registerEvents = kikBot => {
     kikBot.on("receivedcaptcha", (captchaUrl) => {
         console.error("Received Captcha.");
         console.error(`Solve Captcha at ${captchaUrl}.`);
-    });
-
-    kikBot.on("receivedjidinfo", (users) => {
-        console.log("Received Peer Info:");
-        console.log(users);
-        
     });
 
     // Group Chat Events
@@ -216,7 +190,10 @@ const registerEvents = kikBot => {
     });
 
     kikBot.on("userjoinedgroup", (groupId, userId) => {
-        console.log(`${userId} Joined ${groupId}.`); // TODO: Capture Peer Info
+        console.log(`${userId} Joined ${groupId}.`);
+
+        // TODO: Capture Peer Info
+
         console.log("Saving Group Join");
         saveChatEvent(userId, "Join", null, groupId);
     });
