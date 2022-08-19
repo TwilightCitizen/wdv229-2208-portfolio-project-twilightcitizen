@@ -9,7 +9,7 @@ Portfolio Project
 
 const mongoose = require("mongoose");
 
-// Constants
+// Schemas
 
 const user = mongoose.Schema({
     _id: {
@@ -39,6 +39,10 @@ const user = mongoose.Schema({
     }
 });
 
+// Models
+
+const User = mongoose.model("User", user);
+
 // Exports
 
-module.exports = mongoose.model("User", user);
+module.exports = User;
