@@ -56,7 +56,7 @@ const PrivateChatEvent = ChatEvent.discriminator(
 );
 
 const GroupChatEvent = ChatEvent.discriminator(
-    "PrivateChatEvent",
+    "GroupChatEvent",
 
     new mongoose.Schema({
         toGroup: {
