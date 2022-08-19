@@ -34,7 +34,8 @@ const user = mongoose.Schema({
 
     isFriend: {
         type: Boolean,
-        required: false
+        required: true,
+        default: false
     }
 });
 
