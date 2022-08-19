@@ -205,7 +205,7 @@ const registerEvents = kikBot => {
     });
 
     kikBot.on("userjoinedgroup", (groupId, userId) => {
-        console.log(`${userId} Joined ${groupId}.`);
+        console.log(`${userId} Joined ${groupId}.`); // TODO: Capture Peer Info
         console.log("Saving Group Join");
         saveChatEvent(userId, "Join", null, groupId);
     });
