@@ -17,6 +17,7 @@ const Group = require("../models/group");
 router.get("/private", (request, response, next) => {
     User
         .find({ isFriend: true })
+        .sort("displayName")
         .exec()
         .then(result => {
             if (!result) { throw new Error("Error Fetching Friends for Private Chats"); }
@@ -33,6 +34,7 @@ router.get("/private", (request, response, next) => {
 router.get("/group", (request, response, next) => {
     Group
         .find()
+        .sort("displayName")
         .exec()
         .then(result => {
             if (!result) { throw new Error("Error Fetching Groups for Group Chats"); }
