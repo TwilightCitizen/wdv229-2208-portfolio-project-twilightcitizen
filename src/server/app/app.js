@@ -11,7 +11,8 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const dotenv = require("dotenv");
-const chats = require("../routes/chats.js");
+const chats = require("../routes/chats");
+const details = require("../routes/details");
 
 // Configuration
 
@@ -51,6 +52,7 @@ app.get("/", (request, response) => {
 // Router Middleware
 
 app.use("/chats", chats);
+app.use("/details", details);
 
 // Error Handling Middleware
 
