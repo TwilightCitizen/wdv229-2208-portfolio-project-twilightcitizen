@@ -10,8 +10,8 @@ Portfolio Project
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
-const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const chats = require("../routes/chats.js");
 
 // Configuration
 
@@ -67,7 +67,7 @@ app.get("/", (request, response) => {
 
 // Router Middleware
 
-
+app.use("/chats", chats);
 
 // Error Handling Middleware
 
