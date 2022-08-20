@@ -21,10 +21,15 @@ dotenv.config();
 
 // Constants
 
+// Kik bot's own JID needed for logging some chat events.
 const kikBotId = process.env.KIK_BOT_JID;
 
 // Kik Bot
 
+/*
+Raw logging useful if the Kik bot fails to authenticated.
+Can be found in logs/_ANON_.txt
+*/
 const kikBot = new KikClient({
     promptCaptchas: true,
 
@@ -38,6 +43,11 @@ const kikBot = new KikClient({
 
 // Kik Bot Database Operations
 
+/*
+Groups are upserted into the database when received after authentication
+and when requested after group events if the bot discovers it has been
+added to a group of which it has no record.
+*/
 const saveGroups = groups => {
     groups.forEach(group => {
         const newGroup = {
@@ -59,6 +69,11 @@ const saveGroups = groups => {
     });
 };
 
+/*
+All the users in each group, after deduplication, are saved without friendship.
+This only happens after authentication because there are methods to get user
+information for a single user without requesting rosters.
+*/
 const saveGroupUsers = groups => {
     const userIds = groups.reduce((prevGroup, currGroup) =>
         [...prevGroup, ...currGroup.users.map(user => user.jid )], []
@@ -69,10 +84,19 @@ const saveGroupUsers = groups => {
     kikBot.getUserInfo(uniqueUserIds, false, users => saveUsers(users));
 };
 
+/*
+Save user just wraps a single user into an array and forwards to saveUsers.
+*/
 const saveUser = (userId, isFriend = false) => {
     kikBot.getUserInfo([userId], false, users => saveUsers(users, isFriend));
 };
 
+/*
+Users are upserted into the database when received after authentication
+and when requested after group events if the bot discovers it has been
+added to a group of which it has no record.  Also called for individual
+users as needed.
+*/
 const saveUsers = (users, isFriend = false) => {
     users.forEach(user => {
         const newUser = {
@@ -98,9 +122,17 @@ const saveUsers = (users, isFriend = false) => {
     });
 };
 
+/*
+Differentiate between group and user IDs.
+*/
 const isUserId = userOrGroupId =>
     userOrGroupId.split("@")[1] === "talk.kik.com"
 
+/*
+Chat events are saved, not upserted, because even if their contents without respect
+to timestamp are the same, they are still unique.  Private and Group ChatEvens are
+discriminators against the ChatEvent model.
+*/
 const saveChatEvent = (fromUserId, eventStr, content, toUserOrGroupId) => {
     const common = {
         _id: mongoose.Types.ObjectId(),
@@ -125,6 +157,11 @@ const saveChatEvent = (fromUserId, eventStr, content, toUserOrGroupId) => {
         .catch(error => console.error(`Error Saving New ${eventStr}: ${error.message}`));
 };
 
+/*
+The Kik bot may become party to a new group at any time, and there is presently no way
+to query for information about an individual group ID.  Instead, it must see if the group
+ID exists in the group collection, and if not, request fresh rosters.
+*/
 const checkForGroup = groupId => {
     Group
         .findById(groupId)
@@ -147,6 +184,12 @@ const checkForGroup = groupId => {
 
 // Kik Bot Responses
 
+/*
+Groups can receive chats, images, and GIFs from users, to which the Kik bot
+responds mostly uniformly.  Saving the user is not necessary in the case where
+the group is new to the bot, but it is necessary if the group is not because
+the user could have changed his or her display name or profile picture.
+*/
 const handleGroupReceive = (userId, eventStr, it, groupId) => {
     console.log(`Received Group ${eventStr} from ${userId} in ${groupId}: ${it}`);
     console.log(`Saving Group ${eventStr}.`);
@@ -161,6 +204,13 @@ const handleGroupReceive = (userId, eventStr, it, groupId) => {
     checkForGroup(groupId);
 };
 
+/*
+The Kik bot responds mostly uniformly to private chats, images, and GIFs it
+receives from users.  New private chats can occur at any time, and while adding
+the user as a friend is not necessary for updating friendship for an existing
+friend, but necessary because the friend could have changed his or her display
+name or profile picture.
+*/
 const handlePrivateReceive = (userId, eventStr, it) => {
     console.log(`Received Private ${eventStr} from ${userId}: ${it}`);
     console.log("Adding User as Friend");
@@ -177,13 +227,23 @@ const handlePrivateReceive = (userId, eventStr, it) => {
 
 // Kik Bot Events
 
+/*
+Register events must be called by the server using this Kik bot.
+*/
 const registerEvents = kikBot => {
     // Join Events
 
+    /*
+    Just log authentication success.
+    */
     kikBot.on("authenticated", () => {
         console.log("Authenticated.");
     });
 
+    /*
+    Log receipt of rosters, save groups, group users, and
+    friends, logging these actions, too.
+    */
     kikBot.on("receivedroster", (groups, friends) => {
         console.log("Received Rosters.");
         console.log("Saving Groups.");
@@ -194,12 +254,22 @@ const registerEvents = kikBot => {
         saveUsers(friends, true);
     });
 
+    /*
+    The Kik bot should not have to solve captcha since it is
+    not authenticating anonymously, but on the chance a captcha
+    is required, log receipt of captcha and the URL where it
+    must be solved to allow authentication to procede.
+    */
     kikBot.on("receivedcaptcha", (captchaUrl) => {
         console.error("Received Captcha.");
         console.error(`Solve Captcha at ${captchaUrl}.`);
     });
 
     // Group Chat Events
+
+    /*
+    Receipt of group chats, images, and GIFs are handled mostly uniformly.
+    */
 
     kikBot.on("receivedgroupmsg", (groupId, userId, chat) => {
         handleGroupReceive(userId, "Chat", chat, groupId);
@@ -213,14 +283,26 @@ const registerEvents = kikBot => {
         handleGroupReceive(userId, "GIF", JSON.parse(gif)[0], groupId);
     });
 
+    /*
+    Log chat event for user leaving a group.  Since this could be the
+    first thing the Kik bot receives from a group to which it was not
+    previously party, save the user and check for the group.
+    */
     kikBot.on("userleftgroup", (groupId, userId) => {
         console.log(`User ${userId} Left ${groupId}.`);
+        console.log(`Saving User ${userId}.`);
+        saveUser(userId);
         console.log("Saving Group Leave");
         saveChatEvent(userId, "Leave", null, groupId);
         console.log(`Checking for Group ${groupId}`);
         checkForGroup(groupId);
     });
 
+    /*
+    Log chat event for user joining a group.  Since this could be the
+    first thing the Kik bot receives from a group to which it was not
+    previously party, save the user and check for the group.
+    */
     kikBot.on("userjoinedgroup", (groupId, userId) => {
         console.log(`${userId} Joined ${groupId}.`);
         console.log(`Saving User ${userId}.`);
@@ -232,6 +314,10 @@ const registerEvents = kikBot => {
     });
 
     // Private Chat Events
+
+    /*
+    Receipt of private chats, images, and GIFs are handled mostly uniformly.
+    */
 
     kikBot.on("receivedprivatemsg", (userId, chat) => {
         handlePrivateReceive(userId, "Chat", chat);
