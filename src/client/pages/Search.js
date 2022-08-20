@@ -28,11 +28,11 @@ const Search = () => {
     const layout = useContext(LayoutContext)
     const searchTerms = search;
 
-    const { data, error, isPending } = useFetch(
+    const { data: groups, error: groupsError, isPending: groupsPending } = useFetch(
         url(searchTerms), { headers: { accept: "application/json" } }
     );
 
-    const searchResults = data?.map((group, index) =>
+    const searchResults = groups?.map((group, index) =>
         <p key={index}>{group.displayName}</p>
     );
 
@@ -53,9 +53,9 @@ const Search = () => {
     return (
         <div style={styles.search(layout.page)}>
             {
-                isPending ?
+                groupsPending ?
                     <h2>Searching for Groups Matching "{searchTerms}</h2> :
-                error ?
+                groupsError ?
                     <h2>Error Searching for Groups</h2> :
                 searchResults.length ?
                     <h2>Found Some Groups Matching "{searchTerms}":</h2> :
