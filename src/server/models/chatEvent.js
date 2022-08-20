@@ -69,4 +69,4 @@ const GroupChatEvent = ChatEvent.discriminator(
 
 // Exports
 
-module.exports = { PrivateChatEvent, GroupChatEvent };
+module.exports = { ChatEvent, PrivateChatEvent, GroupChatEvent };
