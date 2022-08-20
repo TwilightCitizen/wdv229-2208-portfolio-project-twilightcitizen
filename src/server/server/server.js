@@ -33,26 +33,39 @@ const kikBotPassword = process.env.KIK_BOT_PASSWORD;
 
 // Server
 
+/*
+Server presently responds to all requests with a server up message.
+Its behavior will eventually be supplanted by an Express app.
+*/
 const server = http.createServer((request, response) => {
     response.writeHead(200, { "Content-Type": "application/json" });
-
-    response.end(JSON.stringify({
-        message: serverUp
-    }));
+    response.end(JSON.stringify({ message: serverUp }));
 });
 
 // Server Events
 
+/*
+Log the server closures to the console.
+*/
 server.on("close", () => console.error(serverDown));
 
 // Database
 
+/*
+Log database connection errors to the console.
+*/
 mongoose.connect(mongoDbUrl).catch(error =>
     console.error(mongoDBConnectionError(error.message))
 );
 
 // Database Events
 
+/*
+The server and Kik bot rely on the database connection.
+The server relies on the Kik bot being ready.
+Register the Kik bot for its events and authenticate,
+the listen on the server for requests.
+*/
 mongoose.connection.on("connected", () => {
     console.log(mongoDbConnection);
     registerEvents(kikBot);
@@ -60,14 +73,20 @@ mongoose.connection.on("connected", () => {
     server.listen( serverPort, () => console.log(serverUp));
 });
 
+/*
+The database connection can go down with or without an error.
+If it does, stop listening on the sever for requests, and stop
+the Kik bot from logging chat information to the database.
+*/
+
 mongoose.connection.on("disconnected", () => {
     console.error(mongoDBConnectionError());
-    kikBot.connection.disconnect();
     server.close();
+    kikBot.connection.disconnect();
 });
 
 mongoose.connection.on("error", error => {
     console.error(mongoDBConnectionError(error.message));
-    kikBot.connection.disconnect();
     server.close();
+    kikBot.connection.disconnect();
 });
