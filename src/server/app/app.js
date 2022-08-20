@@ -72,14 +72,14 @@ app.get("/", (request, response) => {
 // Error Handling Middleware
 
 app.use((request, response, next) => {
-    const error = new Error("NOT FOUND");
+    const error = new Error("Not Found");
 
     error.status = 404;
 
     next(error)
 });
 
-app.use((error, request, response) => {
+app.use((error, request, response, next) => {
     response.status(error.status || 500).json({
         error: error.message
     });
