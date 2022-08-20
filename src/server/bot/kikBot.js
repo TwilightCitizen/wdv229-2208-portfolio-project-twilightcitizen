@@ -60,11 +60,15 @@ const saveGroups = groups => {
 };
 
 const saveGroupUsers = groups => {
-    const jids = groups.reduce((prevGroup, currGroup) =>
+    const userIds = groups.reduce((prevGroup, currGroup) =>
         [...prevGroup, ...currGroup.users.map(user => user.jid )], []
     );
 
-    kikBot.getUserInfo(jids, false, users =>  saveUsers(users));
+    kikBot.getUserInfo(userIds, false, users => saveUsers(users));
+};
+
+const saveUser = (userId, isFriend = false) => {
+    kikBot.getUserInfo([userId], false, users => saveUsers(users, isFriend));
 };
 
 const saveUsers = (users, isFriend = false) => {
@@ -119,6 +123,26 @@ const saveChatEvent = (fromUserId, eventStr, content, toUserOrGroupId) => {
         .catch(error => console.error(`Error Saving New ${eventStr}: ${error.message}`));
 };
 
+const checkForGroup = groupId => {
+    Group
+        .findById(groupId)
+        .exec()
+        .then(result => {
+            if (!result) {
+                console.log(`Group ${groupId} Not Found.`);
+                console.log("Requesting Group Rosters");
+
+                kikBot.getRoster((groups) => {
+                    console.log("Saving Groups.");
+                    saveGroups(groups);
+                });
+            } else {
+                console.log(`Group ${groupId} Found.`);
+            }
+        })
+        .catch(error => console.error(`Error Checking for Group ${groupId}: ${error.message}`));
+};
+
 // Kik Bot Responses
 
 const handleGroupReceive = (userId, eventStr, it, groupId) => {
@@ -129,6 +153,10 @@ const handleGroupReceive = (userId, eventStr, it, groupId) => {
     kikBot.sendMessage(groupId, it);
     console.log(`Saving ${eventStr} Back.`);
     saveChatEvent(kikBotId, eventStr, it, groupId);
+    console.log(`Saving User ${userId}.`);
+    saveUser(userId);
+    console.log(`Checking for Group ${groupId}`);
+    checkForGroup(groupId);
 };
 
 const handlePrivateReceive = (userId, eventStr, it) => {
@@ -141,6 +169,8 @@ const handlePrivateReceive = (userId, eventStr, it) => {
     kikBot.sendMessage(userId, it)
     console.log(`Saving ${eventStr} Back.`);
     saveChatEvent(kikBotId, eventStr, it, userId);
+    console.log(`Saving Friend ${userId}.`);
+    saveUser(userId, true);
 };
 
 // Kik Bot Events
@@ -185,15 +215,18 @@ const registerEvents = kikBot => {
         console.log(`User ${userId} Left ${groupId}.`);
         console.log("Saving Group Leave");
         saveChatEvent(userId, "Leave", null, groupId);
+        console.log(`Checking for Group ${groupId}`);
+        checkForGroup(groupId);
     });
 
     kikBot.on("userjoinedgroup", (groupId, userId) => {
         console.log(`${userId} Joined ${groupId}.`);
-
-        // TODO: Capture Peer Info
-
+        console.log(`Saving User ${userId}.`);
+        saveUser(userId);
         console.log("Saving Group Join");
         saveChatEvent(userId, "Join", null, groupId);
+        console.log(`Checking for Group ${groupId}`);
+        checkForGroup(groupId);
     });
 
     // Private Chat Events
