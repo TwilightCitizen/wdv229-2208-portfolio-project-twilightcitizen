@@ -138,6 +138,7 @@ const saveChatEvent = (fromUserId, eventStr, content, toUserOrGroupId) => {
         _id: mongoose.Types.ObjectId(),
         fromUser: fromUserId,
         event: eventStr,
+        ...(content.length > 0 ? { content: content } : null)
     };
 
     const newChatEvent = isUserId(toUserOrGroupId) ?

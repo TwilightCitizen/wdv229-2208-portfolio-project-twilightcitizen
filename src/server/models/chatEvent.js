@@ -26,6 +26,12 @@ const chatEvent = mongoose.Schema({
         default: () => (new Date()).toISOString().replace(/T/,", ").slice(0, -5)
     },
 
+    orderStamp: {
+        type: Date,
+        required: true,
+        default: () => new Date()
+    },
+
     event: {
         type: String,
         required: true
@@ -69,4 +75,4 @@ const GroupChatEvent = ChatEvent.discriminator(
 
 // Exports
 
-module.exports = { PrivateChatEvent, GroupChatEvent };
+module.exports = { ChatEvent, PrivateChatEvent, GroupChatEvent };
