@@ -11,6 +11,7 @@ const http = require("http");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const { kikBot, registerEvents } = require("../bot/kikBot");
+const app = require("../app/app");
 
 // Configuration
 
@@ -34,13 +35,9 @@ const kikBotPassword = process.env.KIK_BOT_PASSWORD;
 // Server
 
 /*
-Server presently responds to all requests with a server up message.
-Its behavior will eventually be supplanted by an Express app.
+Server created as an instance of the Express app.
 */
-const server = http.createServer((request, response) => {
-    response.writeHead(200, { "Content-Type": "application/json" });
-    response.end(JSON.stringify({ message: serverUp }));
-});
+const server = http.createServer(app);
 
 // Server Events
 
