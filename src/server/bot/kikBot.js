@@ -64,7 +64,9 @@ const saveGroupUsers = groups => {
         [...prevGroup, ...currGroup.users.map(user => user.jid )], []
     );
 
-    kikBot.getUserInfo(userIds, false, users => saveUsers(users));
+    const uniqueUserIds = [...new Set(userIds)];
+
+    kikBot.getUserInfo(uniqueUserIds, false, users => saveUsers(users));
 };
 
 const saveUser = (userId, isFriend = false) => {
