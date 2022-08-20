@@ -9,19 +9,17 @@ Portfolio Project
 
 const mongoose = require("mongoose");
 
-// Constants
+// Schemas
 
 const group = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
-
-    jid: {
+    _id: {
         type: String,
         required: true
     },
 
     hashTag: {
         type: String,
-        required: true
+        required: false
     },
 
     displayName: {
@@ -30,6 +28,10 @@ const group = mongoose.Schema({
     }
 });
 
+// Models
+
+const Group = mongoose.model("Group", group);
+
 // Exports
 
-module.exports = mongoose.model("Group", group);
+module.exports = Group;

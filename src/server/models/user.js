@@ -9,17 +9,15 @@ Portfolio Project
 
 const mongoose = require("mongoose");
 
-// Constants
+// Schemas
 
 const user = mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
-
-    jid: {
+    _id: {
         type: String,
         required: true
     },
 
-    userName: {
+    username: {
         type: String,
         required: true
     },
@@ -27,9 +25,24 @@ const user = mongoose.Schema({
     displayName: {
         type: String,
         required: true
+    },
+
+    profilePic: {
+        type: String,
+        required: false
+    },
+
+    isFriend: {
+        type: Boolean,
+        required: true,
+        default: false
     }
 });
 
+// Models
+
+const User = mongoose.model("User", user);
+
 // Exports
 
-module.exports = mongoose.model("User", user);
+module.exports = User;

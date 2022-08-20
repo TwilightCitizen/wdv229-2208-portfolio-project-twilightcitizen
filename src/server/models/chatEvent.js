@@ -9,21 +9,21 @@ Portfolio Project
 
 const mongoose = require("mongoose");
 
-// Constants
+// Schemas
 
 const chatEvent = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
 
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
+    fromUser: {
+        type: String,
         ref: "User",
         required: true
     },
 
     timeStamp: {
-        type: Date,
+        type: String,
         required: true,
-        default: (new Date()).toISOString().replace(/T/,", ").slice(0, -8)
+        default: () => (new Date()).toISOString().replace(/T/,", ").slice(0, -5)
     },
 
     event: {
@@ -33,17 +33,40 @@ const chatEvent = mongoose.Schema({
 
     content: {
         type: String,
-        required: true,
-        default: ""
-    },
-
-    group: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Group",
-        required: false,
+        required: false
     }
 });
 
+// Models
+
+const ChatEvent = mongoose.model("ChatEvent", chatEvent);
+
+// Discriminators
+
+const PrivateChatEvent = ChatEvent.discriminator(
+    "PrivateChatEvent",
+
+    new mongoose.Schema({
+        toUser: {
+            type: String,
+            ref: "User",
+            required: true,
+        }
+    })
+);
+
+const GroupChatEvent = ChatEvent.discriminator(
+    "GroupChatEvent",
+
+    new mongoose.Schema({
+        toGroup: {
+            type: String,
+            ref: "Group",
+            required: true,
+        }
+    })
+);
+
 // Exports
 
-module.exports = mongoose.model("ChatEvent", chatEvent);
+module.exports = { PrivateChatEvent, GroupChatEvent };
