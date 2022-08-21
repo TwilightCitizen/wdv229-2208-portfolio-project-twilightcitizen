@@ -28,7 +28,11 @@ const Search = () => {
     const layout = useContext(LayoutContext)
     const searchTerms = search;
 
-    const { data: groups, error: groupsError, isPending: groupsPending } = useFetch(
+    const {
+        data: groups,
+        error: groupsError,
+        isPending: groupsPending
+    } = useFetch(
         url(searchTerms), { headers: { accept: "application/json" } }
     );
 
@@ -60,9 +64,9 @@ const Search = () => {
                 searchResults.length ?
                     <h2>Found Some Groups Matching "{searchTerms}":</h2> :
                     <h2>Found No Groups Matching "{searchTerms}".</h2>
+            } {
+                searchResults
             }
-
-            {searchResults}
         </div>
     );
 };
