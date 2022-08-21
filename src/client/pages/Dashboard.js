@@ -50,9 +50,7 @@ const Dashboard = () => {
                 groupChatsError ?
                     <h2>Error Searching for Group Chats</h2> :
                     <ChatList title={"Group Chats"} chats={groupChats}/>
-            }
-
-            {
+            } {
                 privateChatsPending ?
                     <h2>Searching for Private Chats</h2> :
                 privateChatsError ?
