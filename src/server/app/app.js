@@ -14,6 +14,7 @@ const dotenv = require("dotenv");
 const chats = require("../routes/chats");
 const details = require("../routes/details");
 const search = require("../routes/search");
+const profilePics = require("../routes/profilePics");
 
 // Configuration
 
@@ -61,6 +62,7 @@ app.get("/", (request, response) => {
 app.use("/chats", chats);
 app.use("/details", details);
 app.use("/search", search);
+app.use("/profile_pics", profilePics);
 
 // Error Handling Middleware
 
