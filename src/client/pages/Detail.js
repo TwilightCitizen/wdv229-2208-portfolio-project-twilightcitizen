@@ -28,12 +28,14 @@ const Detail = () => {
     const layout = useContext(LayoutContext);
     const selectedChat = chat;
 
-    console.log(selectedChat._id);
-
     const isGroup = selectedChat._id.split("@")[1] === "groups.kik.com";
     const headerRest = `${isGroup ? "in" : "with"} ${selectedChat.displayName}`;
 
-    const { data: chatDetails, error: chatDetailsError, isPending: chatDetailsPending } = useFetch(
+    const {
+        data: chatDetails,
+        error: chatDetailsError,
+        isPending: chatDetailsPending
+    } = useFetch(
         url(selectedChat._id), { headers: { accept: "application/json" } }
     );
 
@@ -60,9 +62,25 @@ const Detail = () => {
                     <h2>Error Searching for Chat Details {headerRest}</h2> :
                     <h2>Chat Details {headerRest}</h2>
             } {
-                chatDetails ? chatDetails.map((chatDetail, index) =>
-                    <ChatDetail detail={chatDetail} chat={selectedChat} key={index}/>
-                ) : null
+                chatDetails?.length > 0 ?
+                    chatDetails.map((chatDetail, index) =>
+                        <ChatDetail detail={chatDetail} chat={selectedChat} key={index}/>
+                    ) :
+
+                    <>
+                        <p>It looks like there are no chat events recorded for this chat.  That is normal if you just started running this app on your machine because the database would be empty of chat events.</p>
+
+                        {
+                            isGroup ?
+                                <p>Try logging into Kik with one of the test accounts and chatting in this group.  That should generate some chat events for the Kik bot to save.  Then, select this group chat from the Dashboard again, and those chat events should be recorded here.</p> :
+
+                                <>
+                                    <p>Try logging into Kik with one of the test accounts and chatting privately with the Kik bot.  That should generate some chat events for the Kik bot to save.  Then, select that private chat from the Dashboard, and you should see those chat events recorded.</p>
+
+                                    <p><b>Note:</b>  If you selected a private chat with someone other than one of the test accounts, you will not be able to log into Kik with that account to chat with the Kik bot.</p>
+                                </>
+                        }
+                    </>
             }
         </div>
     );
