@@ -59,7 +59,7 @@ const User = () => {
     return (
         <div style={styles.user(layout.page)}>
             {
-                profilePic ?
+                profilePic?.profilePic ?
                     <img
                         src={profilePic.profilePic}
                         alt={`${user.displayName}'s Profile`}
