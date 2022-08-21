@@ -32,7 +32,12 @@ const ChatList = props => {
     return (
         <div>
             <h2>{props.title}</h2>
-            {chats.length > 0 ? <ul>{chats}</ul> : <p>It looks like there are no {props.title} right now.</p>}
+
+            {
+                chats.length > 0 ?
+                    <ul>{chats}</ul> :
+                    <p>It looks like there are no {props.title} right now.</p>
+            }
         </div>
     );
 };
