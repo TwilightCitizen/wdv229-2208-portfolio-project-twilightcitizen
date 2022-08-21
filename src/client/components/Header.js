@@ -30,14 +30,17 @@ const Header = () => {
         <header style={styles.header(layout.header, colors)}>
             {icon}
             <h1>{page.title}</h1>
-            {page.showSearch ? <SearchBox style={styles.search}/> : null}
 
-            {page.backNavigation ?
-                <IconNavLink
-                    link={page.backNavigation.link}
-                    label={`Back to ${page.backNavigation.title}`}
-                    icon={backNavigationIcon}
-                /> : null
+            {
+                page.showSearch ?
+                    <SearchBox style={styles.search}/> : null
+            } {
+                page.backNavigation ?
+                    <IconNavLink
+                        link={page.backNavigation.link}
+                        label={`Back to ${page.backNavigation.title}`}
+                        icon={backNavigationIcon}
+                    /> : null
             }
         </header>
     );
