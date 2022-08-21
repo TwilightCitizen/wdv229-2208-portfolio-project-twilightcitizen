@@ -26,11 +26,19 @@ const Dashboard = () => {
     const [, setPage] = useContext(PageContext);
     const layout = useContext(LayoutContext);
 
-    const { data: groupChats, error: groupChatsError, isPending: groupChatsPending } = useFetch(
+    const {
+        data: groupChats,
+        error: groupChatsError,
+        isPending: groupChatsPending
+    } = useFetch(
         url("group"), { headers: { accept: "application/json" } }
     );
 
-    const { data: privateChats, error: privateChatsError, isPending: privateChatsPending } = useFetch(
+    const {
+        data: privateChats,
+        error: privateChatsError,
+        isPending: privateChatsPending
+    } = useFetch(
         url("private"), { headers: { accept: "application/json" } }
     );
 
