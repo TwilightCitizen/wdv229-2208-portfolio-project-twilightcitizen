@@ -8,6 +8,7 @@ Portfolio Project
 // Imports
 
 import { useContext, useEffect } from "react";
+import { useFetch } from "react-async";
 import { RiUserFill } from "react-icons/ri";
 
 import {
@@ -21,6 +22,8 @@ import {
 // Constants
 
 const icon = style => <RiUserFill style={style}/>
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+const url = userName => `http://localhost:${serverPort}/profile_pics/${userName}`;
 
 // Component
 
@@ -30,6 +33,14 @@ const User = () => {
     const layout = useContext(LayoutContext)
     const [user,] = useContext(UserContext)
     const colors = useContext(ColorContext)
+
+    const {
+        data: profilePic,
+        error: profilePicError,
+        isPending: profilePicPending
+    } = useFetch(
+        url(user.username), { headers: { accept: "application/json" } }
+    );
 
     useEffect(() => {
         setPage(() => ({
@@ -47,7 +58,19 @@ const User = () => {
 
     return (
         <div style={styles.user(layout.page)}>
-            <RiUserFill style={styles.profilePic(colors)}/>
+            {
+                profilePic ?
+                    <img
+                        src={profilePic.profilePic}
+                        alt={`${user.displayName}'s Profile`}
+                        style={styles.profilePic(colors)}
+                    /> :
+                profilePicPending ?
+                    <RiUserFill style={styles.profilePic(colors)}/> :
+                profilePicError ?
+                    <RiUserFill style={styles.profilePic(colors)}/> :
+                    <RiUserFill style={styles.profilePic(colors)}/>
+            }
 
             <label htmlFor={"username"}>Username</label>
 
@@ -97,7 +120,7 @@ const styles = {
         width: "3in",
         borderRadius: "100%",
         background: colors.dark,
-        color: colors.veryLight
+        color: colors.veryLight,
     }),
 
     input: colors => ({

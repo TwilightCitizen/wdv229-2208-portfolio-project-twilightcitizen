@@ -9,12 +9,16 @@ Portfolio Project
 
 import { useContext, useEffect } from "react";
 import { RiSearchFill } from "react-icons/ri";
+import { useFetch } from "react-async";
 
 import { LayoutContext, PageContext, SearchContext } from "../app/App";
+
 
 // Constants
 
 const icon = style => <RiSearchFill style={style}/>
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+const url = term => `http://localhost:${serverPort}/search/${term}`;
 
 // Component
 
@@ -24,9 +28,17 @@ const Search = () => {
     const layout = useContext(LayoutContext)
     const searchTerms = search;
 
-    const searchResults = groups
-        .filter(group => group.displayName.toLowerCase().includes(searchTerms.toLowerCase()))
-        .map((group, index) => <p key={index}>{group.displayName}</p>);
+    const {
+        data: groups,
+        error: groupsError,
+        isPending: groupsPending
+    } = useFetch(
+        url(searchTerms), { headers: { accept: "application/json" } }
+    );
+
+    const searchResults = groups?.map((group, index) =>
+        <p key={index}>{group.displayName}</p>
+    );
 
     useEffect(() => {
         setPage(() => ({
@@ -45,12 +57,16 @@ const Search = () => {
     return (
         <div style={styles.search(layout.page)}>
             {
+                groupsPending ?
+                    <h2>Searching for Groups Matching "{searchTerms}</h2> :
+                groupsError ?
+                    <h2>Error Searching for Groups</h2> :
                 searchResults.length ?
-                <h2>Here are groups matching "{searchTerms}":</h2> :
-                <h2>There are no groups matching "{searchTerms}".</h2>
+                    <h2>Found Some Groups Matching "{searchTerms}":</h2> :
+                    <h2>Found No Groups Matching "{searchTerms}".</h2>
+            } {
+                searchResults
             }
-
-            {searchResults}
         </div>
     );
 };
@@ -70,45 +86,3 @@ const styles = {
         ...layout
     })
 };
-
-// Mock Data
-
-const groups = [
-    {
-        jid: "1234567891_g@groups.kik.com",
-        displayName: "Cats"
-    }, {
-        jid: "1234567892_g@groups.kik.com",
-        displayName: "Cats are Great"
-    }, {
-        jid: "1234567893_g@groups.kik.com",
-        displayName: "We Hate Cats"
-    },  {
-        jid: "1234567894_g@groups.kik.com",
-        displayName: "Cat Lovers"
-    }, {
-        jid: "1234567891_g@groups.kik.com",
-        displayName: "Dogs"
-    }, {
-        jid: "1234567892_g@groups.kik.com",
-        displayName: "Dogs are Great"
-    }, {
-        jid: "1234567893_g@groups.kik.com",
-        displayName: "We Hate Dogs"
-    },  {
-        jid: "1234567894_g@groups.kik.com",
-        displayName: "Dog Lovers"
-    }, {
-        jid: "1234567891_g@groups.kik.com",
-        displayName: "Bunnies"
-    }, {
-        jid: "1234567892_g@groups.kik.com",
-        displayName: "Bunnies are Great"
-    }, {
-        jid: "1234567893_g@groups.kik.com",
-        displayName: "We Hate Bunnies"
-    },  {
-        jid: "1234567894_g@groups.kik.com",
-        displayName: "Bunny Lovers"
-    },
-];

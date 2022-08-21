@@ -8,6 +8,7 @@ Portfolio Project
 // Imports
 
 import { useContext, useEffect } from "react";
+import { useFetch } from "react-async";
 import { RiChat4Fill } from "react-icons/ri";
 
 import { PageContext, ChatContext, LayoutContext } from "../app/App";
@@ -16,6 +17,8 @@ import ChatDetail from "../components/ChatDetail";
 // Constants
 
 const icon = style => <RiChat4Fill style={style}/>;
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+const url = id => `http://localhost:${serverPort}/details/${id}`;
 
 // Component
 
@@ -24,12 +27,17 @@ const Detail = () => {
     const [chat, setChat] = useContext(ChatContext);
     const layout = useContext(LayoutContext);
     const selectedChat = chat;
-    const isGroup = selectedChat.jid.split("@")[1].split(".")[0] === "groups";
 
-    const chatDetails = (isGroup ? groupChatEvents : privateChatEvents(selectedChat))
-        .map((chatDetail, index) =>
-            <ChatDetail detail={chatDetail} chat={selectedChat} key={index}/>
-        );
+    const isGroup = selectedChat._id.split("@")[1] === "groups.kik.com";
+    const headerRest = `${isGroup ? "in" : "with"} ${selectedChat.displayName}`;
+
+    const {
+        data: chatDetails,
+        error: chatDetailsError,
+        isPending: chatDetailsPending
+    } = useFetch(
+        url(selectedChat._id), { headers: { accept: "application/json" } }
+    );
 
     useEffect(() => {
         setPage(() => ({
@@ -47,8 +55,33 @@ const Detail = () => {
 
     return (
         <div style={styles.detail(layout.page)}>
-            <h2>Chat Details {isGroup ? "in" : "with"} {selectedChat.displayName}</h2>
-            {chatDetails}
+            {
+                chatDetailsPending ?
+                    <h2>Searching for Chat Details {headerRest}</h2> :
+                chatDetailsError ?
+                    <h2>Error Searching for Chat Details {headerRest}</h2> :
+                    <h2>Chat Details {headerRest}</h2>
+            } {
+                chatDetails?.length > 0 ?
+                    chatDetails.map((chatDetail, index) =>
+                        <ChatDetail detail={chatDetail} chat={selectedChat} key={index}/>
+                    ) :
+
+                    <>
+                        <p>It looks like there are no chat events recorded for this chat.  That is normal if you just started running this app on your machine because the database would be empty of chat events.</p>
+
+                        {
+                            isGroup ?
+                                <p>Try logging into Kik with one of the test accounts and chatting in this group.  That should generate some chat events for the Kik bot to save.  Then, select this group chat from the Dashboard again, and those chat events should be recorded here.</p> :
+
+                                <>
+                                    <p>Try logging into Kik with one of the test accounts and chatting privately with the Kik bot.  That should generate some chat events for the Kik bot to save.  Then, select that private chat from the Dashboard, and you should see those chat events recorded.</p>
+
+                                    <p><b>Note:</b>  If you selected a private chat with someone other than one of the test accounts, you will not be able to log into Kik with that account to chat with the Kik bot.</p>
+                                </>
+                        }
+                    </>
+            }
         </div>
     );
 };
@@ -69,69 +102,3 @@ const styles = {
         ...layout
     })
 };
-
-// Mock Data
-
-const groupChatUser = {
-    jid: "fakeuser1@talk.kik.com",
-    username: "fakeuser1",
-    displayName: "Fake User 1"
-};
-
-const groupChatEvents = [
-    {
-        user: groupChatUser,
-        timeStamp: "2022-08-14, 14:08",
-        event: "join",
-        content: ""
-    }, {
-        user: groupChatUser,
-        timeStamp: "2022-08-14, 14:08",
-        event: "chat",
-        content: "Hey, group!  How goes it?"
-    }, {
-        user: groupChatUser,
-        timeStamp: "2022-08-14, 14:12",
-        event: "image",
-        content: "http://link.to.image.png"
-    }, {
-        user: groupChatUser,
-        timeStamp: "2022-08-14, 14:13",
-        event: "chat",
-        content: "Sure is quiet in here."
-    }, {
-        user: groupChatUser,
-        timeStamp: "2022-08-14, 14:14",
-        event: "gif",
-        content: "http://link.to.gif.mp4"
-    }, {
-        user: groupChatUser,
-        timeStamp: "2022-08-14, 14:08",
-        event: "leave",
-        content: ""
-    }
-];
-
-const privateChatEvents = privateChatUser => ([
-    {
-        user: privateChatUser,
-        timeStamp: "2022-08-14, 14:08",
-        event: "chat",
-        content: "Hey, bot!  How goes it?"
-    }, {
-        user: privateChatUser,
-        timeStamp: "2022-08-14, 14:09",
-        event: "chat",
-        content: "How come you never say anything?"
-    }, {
-        user: privateChatUser,
-        timeStamp: "2022-08-14, 14:10",
-        event: "image",
-        content: "http://link.to.image.png"
-    }, {
-        user: groupChatUser,
-        timeStamp: "2022-08-14, 14:11",
-        event: "gif",
-        content: "http://link.to.gif.mp4"
-    }
-]);

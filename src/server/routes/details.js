@@ -30,10 +30,11 @@ router.get("/:id", (request, response, next) => {
 
     const filter = isUserId(id) ?
         { $or: [
-            { fromUser: id, toUser: kikBotId },
-            { fromUser: kikBotId, toUser: id }
+            { fromUser: id, toUser: kikBotId, __t: "PrivateChatEvent" },
+            { fromUser: kikBotId, toUser: id, __t: "PrivateChatEvent" }
         ] } :
-        { toGroup: id };
+
+        { toGroup: id, __t: "GroupChatEvent" };
 
     const children = ["fromUser", isUserId(id) ? "toUser" : "toGroup"];
 

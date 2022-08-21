@@ -9,6 +9,7 @@ Portfolio Project
 
 import { useContext, useEffect } from "react";
 import { RiDashboardFill } from "react-icons/ri";
+import { useFetch } from "react-async";
 
 import { PageContext, LayoutContext } from "../app/App";
 import ChatList from "../components/ChatList";
@@ -16,12 +17,30 @@ import ChatList from "../components/ChatList";
 // Constants
 
 const icon = style => <RiDashboardFill style={style}/>
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+const url = which => `http://localhost:${serverPort}/chats/${which}`;
 
 // Component
 
 const Dashboard = () => {
     const [, setPage] = useContext(PageContext);
     const layout = useContext(LayoutContext);
+
+    const {
+        data: groupChats,
+        error: groupChatsError,
+        isPending: groupChatsPending
+    } = useFetch(
+        url("group"), { headers: { accept: "application/json" } }
+    );
+
+    const {
+        data: privateChats,
+        error: privateChatsError,
+        isPending: privateChatsPending
+    } = useFetch(
+        url("private"), { headers: { accept: "application/json" } }
+    );
 
     useEffect(() => {
         setPage(() => ({
@@ -33,8 +52,19 @@ const Dashboard = () => {
 
     return (
         <div style={styles.dashboard(layout.page)}>
-            <ChatList title={"Group Chats"} chats={groupChats}/>
-            <ChatList title={"Private Chats"} chats={privateChats}/>
+            {
+                groupChatsPending ?
+                    <h2>Searching for Group Chats</h2> :
+                groupChatsError ?
+                    <h2>Error Searching for Group Chats</h2> :
+                    <ChatList title={"Group Chats"} chats={groupChats}/>
+            } {
+                privateChatsPending ?
+                    <h2>Searching for Private Chats</h2> :
+                privateChatsError ?
+                    <h2>Error Searching for Private Chats</h2> :
+                    <ChatList title={"Private Chats"} chats={privateChats}/>
+            }
         </div>
     );
 };
@@ -54,48 +84,3 @@ const styles = {
         ...layout
     })
 }
-
-// Mock Data
-
-const privateChats = [
-    {
-        jid: "kikteam@talk.kik.com",
-        username: "kikteam",
-        displayName: "Kik Team"
-    }, {
-        jid: "fakeuser1@talk.kik.com",
-        username: "fakeuser1",
-        displayName: "Fake User 1"
-    }, {
-        jid: "fakeuser1@talk.kik.com",
-        username: "fakeuser2",
-        displayName: "Fake User 2"
-    }, {
-        jid: "fakeuser1@talk.kik.com",
-        username: "fakeuser3",
-        displayName: "Fake User 3"
-    }, {
-        jid: "fakeuser1@talk.kik.com",
-        username: "fakeuser4",
-        displayName: "Fake User 4"
-    }
-];
-
-const groupChats = [
-    {
-        jid: "1234567891_g@groups.kik.com",
-        displayName: "Fake Group 1"
-    }, {
-        jid: "1234567892_g@groups.kik.com",
-        displayName: "Fake Group 2"
-    }, {
-        jid: "1234567893_g@groups.kik.com",
-        displayName: "Fake Group 3"
-    }, {
-        jid: "1234567894_g@groups.kik.com",
-        displayName: "Fake Group 4"
-    }, {
-        jid: "1234567895_g@groups.kik.com",
-        displayName: "Fake Group 5"
-    },
-];

@@ -24,32 +24,32 @@ const ChatDetail = props => {
 
             <NavLink
                 to={"/user"}
-                title={props.detail.user.displayName}
+                title={props.detail.fromUser.displayName}
                 style={styles.user}
 
                 onClick={() => {
                     setChat(props.chat);
-                    setUser(props.detail.user)
+                    setUser(props.detail.fromUser)
                 }}
             >
-                {props.detail.user.displayName}
+                {props.detail.fromUser.displayName}
             </NavLink>
 
             <p style={styles.event}>
                 {
-                    props.detail.event === "chat" ? "Said: " :
-                    props.detail.event === "join" ? "Joined." :
-                    props.detail.event === "leave" ? "Left." :
-                    props.detail.event === "image" ? "Sent an Image: " :
-                    props.detail.event === "gif" ? "Sent a GIF: " : null
+                    props.detail.event === "Chat" ? "Said: " :
+                    props.detail.event === "Join" ? "Joined." :
+                    props.detail.event === "Leave" ? "Left." :
+                    props.detail.event === "Image" ? "Sent an Image: " :
+                    props.detail.event === "GIF" ? "Sent a GIF: " : null
                 }
             </p>
 
             <p>
                 {
-                    props.detail.event === "chat" ? props.detail.content :
-                    props.detail.event === "join" || props.detail.event === "leave" ? null :
-                    props.detail.event === "image" || props.detail.event === "gif" ?
+                    props.detail.event === "Chat" ? props.detail.content :
+                    props.detail.event === "Join" || props.detail.event === "Leave" ? null :
+                    props.detail.event === "Image" || props.detail.event === "GIF" ?
 
                     <a href={props.detail.content} target={"_blank"} rel="noreferrer">
                         {props.detail.content}
@@ -67,27 +67,27 @@ export default ChatDetail;
 // Styles
 
 const styles = {
-    chatType: {
+    ChatType: {
         background: "#4488FF44",
         borderBottom: "2px solid #4488FF"
     },
 
-    joinType: {
+    JoinType: {
         background: "#88FF8844",
         borderBottom: "2px solid #88FF88"
     },
 
-    leaveType: {
+    LeaveType: {
         background: "#FF888844",
         borderBottom: "2px solid #FF8888"
     },
 
-    imageType: {
+    ImageType: {
         background: "#4488FF44",
         borderBottom: "2px solid #4488FF"
     },
 
-    gifType: {
+    GIFType: {
         background: "#4488FF44",
         borderBottom: "2px solid #4488FF"
     },
@@ -102,6 +102,7 @@ const styles = {
         padding: "0.0625in",
         borderRadius: "0.0625in",
         background: "#DDDDDD",
+        borderBottom: "2px solid #888888",
 
         ...styles[`${detailType}Type`]
     }),
