@@ -17,13 +17,13 @@ import { ChatContext } from "../app/App";
 const ChatList = props => {
     const [,setChat] = useContext(ChatContext);
 
-    const chats = props.chats.map((element, index) => {
-        const onClick = () => { setChat(element); };
+    const chats = props.chats.map((chat, index) => {
+        const onClick = () => { setChat(chat); };
 
         return (
             <li style={styles.chat} key={index}>
-                <NavLink to={"/detail"} title={element.displayName} onClick={onClick}>
-                    {element.displayName}
+                <NavLink to={"/detail"} title={chat.displayName} onClick={onClick}>
+                    {chat.displayName}
                 </NavLink>
             </li>
         );
