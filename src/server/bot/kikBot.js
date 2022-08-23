@@ -87,6 +87,62 @@ const kikRegistrationToDays = kikRegistration => {
 };
 
 /*
+Generate an array of promises that resolve basic user data obtained
+from the Kik Node API's callback, writing the unique ID which will be needed
+to merge Xiphias user data.
+*/
+
+const getBasicUsers = uniqueIds => uniqueIds.map(uniqueId => new Promise(resolve => {
+    kikBot.getUserInfo(uniqueId, false, user => {
+        resolve({ uniqueId: uniqueId, ...user[0] });
+    });
+}));
+
+/*
+Generate an array of promises that resolve Xiphias user data obtained
+from the Kik Node API's callback, merging in the basic user data.  This is necessary
+to get the number of days a user has been on Kik.
+*/
+
+const getXiphiasUsers = basicUsers => basicUsers.map(basicUser => new Promise(resolve => {
+    kikBot.getUserInfo(basicUser.uniqueId, true, user => {
+        resolve({
+            ...basicUser,
+
+            daysOnKik: kikRegistrationToDays(user[0].registrationTimestamp)
+        });
+    });
+}));
+
+/*
+Save Xiphias user information if we can.  The service can be down occasionally,
+and that would cause the application to hang at saving.  A 15-second timer
+races the attempt to get Xiphias user information with basic user information,
+so we can at least have that much saved if the service is down.
+*/
+const saveBasicIfXiphiasDown = (uniqueIds, isFriend) => {
+    Promise.all(getBasicUsers(uniqueIds)).then(basicUsers => {
+        const tryXiphiasUsers = new Promise(resolve => {
+            Promise.all(getXiphiasUsers(basicUsers)).then(xiphiasUsers => {
+                resolve(xiphiasUsers);
+            });
+        });
+
+        const basicUsersAfterTimeout = new Promise(resolve => {
+            setTimeout(() => resolve(basicUsers), 15000);
+        });
+
+        Promise.race([
+            tryXiphiasUsers,
+            basicUsersAfterTimeout
+        ]).then(users => {
+            console.log(users);
+            saveUsers(users, isFriend);
+        });
+    });
+};
+
+/*
 All the users in each group, after deduplication, are saved without friendship.
 This only happens after authentication because there are methods to get user
 information for a single user without requesting rosters.
@@ -96,36 +152,16 @@ const saveGroupUsers = groups => {
         [...prevGroup, ...currGroup.users.map(user => user.jid )], []
     );
 
-    const uniqueUserIds = [...new Set(userIds)];
+    const uniqueIds = [...new Set(userIds)];
 
-    kikBot.getUserInfo(uniqueUserIds, false, users1 => {
-        kikBot.getUserInfo(uniqueUserIds, true, users2 => {
-            const users = users1.map((user1, index) => ({
-                ...user1,
-
-                daysOnKik: kikRegistrationToDays(users2[index].registrationTimestamp)
-            }));
-
-            saveUsers(users);
-        });
-    });
+    saveBasicIfXiphiasDown(uniqueIds, false);
 };
 
 /*
 Save user just wraps a single user into an array and forwards to saveUsers.
 */
-const saveUser = (userId, isFriend = false) => {
-    kikBot.getUserInfo([userId], false, users1 => {
-        kikBot.getUserInfo([userId], true, users2 => {
-            const users = users1.map((user1, index) => ({
-                ...user1,
-
-                daysOnKik: kikRegistrationToDays(users2[index].registrationTimestamp)
-            }));
-
-            saveUsers(users, isFriend);
-        });
-    });
+const saveUser = (userId, isFriend) => {
+    saveBasicIfXiphiasDown([userId], isFriend);
 };
 
 /*
@@ -134,8 +170,10 @@ and when requested after group events if the bot discovers it has been
 added to a group of which it has no record.  Also called for individual
 users as needed.
 */
-const saveUsers = (users, isFriend = false) => {
-    users.forEach(user => {
+const saveUsers = (users, isFriend) => {
+    users.filter(
+        user => user.username !== "kikteam"
+    ).forEach(user => {
         const newUser = {
             username: user.username,
             displayName: user.displayName,
