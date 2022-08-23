@@ -32,6 +32,11 @@ const user = mongoose.Schema({
         required: false
     },
 
+    daysOnKik: {
+      type: Number,
+      required: false
+    },
+
     isFriend: {
         type: Boolean,
         required: true,
