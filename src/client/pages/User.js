@@ -92,7 +92,7 @@ const User = () => {
 
             <input
                 id={"daysOnKik"} name={"daysOnKik"}
-                type={"text"} value={"123"}
+                type={"text"} value={user.daysOnKik ?? "Not Available"}
                 disabled={true} style={styles.input(colors)}
             />
         </div>
