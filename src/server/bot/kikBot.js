@@ -70,6 +70,23 @@ const saveGroups = groups => {
 };
 
 /*
+Calculate the number of days between today and another date.  Kik returns the registration
+date as the number of seconds since Epoch, but JavaScript tracks milliseconds since Epoch.
+*/
+const kikRegistrationToDays = kikRegistration => {
+    const millisInSecs = 1000;
+    const secsInMins = 60;
+    const minsInHours = 60;
+    const hoursInDays = 24;
+    const millisInDays = millisInSecs * secsInMins * minsInHours * hoursInDays;
+    const registrationDate = new Date(kikRegistration * millisInSecs);
+    const today = new Date();
+    const dateDiffInMillis = today - registrationDate;
+
+    return Math.round(dateDiffInMillis / millisInDays);
+};
+
+/*
 All the users in each group, after deduplication, are saved without friendship.
 This only happens after authentication because there are methods to get user
 information for a single user without requesting rosters.
@@ -81,14 +98,34 @@ const saveGroupUsers = groups => {
 
     const uniqueUserIds = [...new Set(userIds)];
 
-    kikBot.getUserInfo(uniqueUserIds, false, users => saveUsers(users));
+    kikBot.getUserInfo(uniqueUserIds, false, users1 => {
+        kikBot.getUserInfo(uniqueUserIds, true, users2 => {
+            const users = users1.map((user1, index) => ({
+                ...user1,
+
+                daysOnKik: kikRegistrationToDays(users2[index].registrationTimestamp)
+            }));
+
+            saveUsers(users);
+        });
+    });
 };
 
 /*
 Save user just wraps a single user into an array and forwards to saveUsers.
 */
 const saveUser = (userId, isFriend = false) => {
-    kikBot.getUserInfo([userId], false, users => saveUsers(users, isFriend));
+    kikBot.getUserInfo([userId], false, users1 => {
+        kikBot.getUserInfo([userId], true, users2 => {
+            const users = users1.map((user1, index) => ({
+                ...user1,
+
+                daysOnKik: kikRegistrationToDays(users2[index].registrationTimestamp)
+            }));
+
+            saveUsers(users, isFriend);
+        });
+    });
 };
 
 /*
@@ -103,6 +140,7 @@ const saveUsers = (users, isFriend = false) => {
             username: user.username,
             displayName: user.displayName,
 
+            ...(user.daysOnKik && { daysOnKik: user.daysOnKik }),
             ...(isFriend && { isFriend: isFriend }),
             ...(user.pic && { profilePic: user.pic })
         }
