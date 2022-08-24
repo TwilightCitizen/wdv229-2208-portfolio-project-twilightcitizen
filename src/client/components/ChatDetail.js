@@ -7,33 +7,36 @@ Portfolio Project
 
 // Imports
 
-// Component
-
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 
-import { ChatContext, UserContext } from "../app/App";
+import { ChatContext, UserContext, ColorContext } from "../app/App";
+
+// Component
 
 const ChatDetail = props => {
     const [, setChat] = useContext(ChatContext);
     const [, setUser] = useContext(UserContext);
+    const colors = useContext(ColorContext);
 
     return (
         <div style={styles.chatDetail(props.detail.event)}>
             <p>{props.detail.timeStamp}: </p>
 
-            <NavLink
-                to={"/user"}
-                title={props.detail.fromUser.displayName}
-                style={styles.user}
+            <p>
+                <NavLink
+                    to={"/user"}
+                    title={props.detail.fromUser.displayName}
+                    style={styles.user}
 
-                onClick={() => {
-                    setChat(props.chat);
-                    setUser(props.detail.fromUser)
-                }}
-            >
-                {props.detail.fromUser.displayName}
-            </NavLink>
+                    onClick={() => {
+                        setChat(props.chat);
+                        setUser(props.detail.fromUser)
+                    }}
+                >
+                    {props.detail.fromUser.displayName}
+                </NavLink>
+            </p>
 
             <p style={styles.event}>
                 {
@@ -49,11 +52,22 @@ const ChatDetail = props => {
                 {
                     props.detail.event === "Chat" ? props.detail.content :
                     props.detail.event === "Join" || props.detail.event === "Leave" ? null :
-                    props.detail.event === "Image" || props.detail.event === "GIF" ?
 
-                    <a href={props.detail.content} target={"_blank"} rel="noreferrer">
-                        {props.detail.content}
-                    </a> : null
+                    props.detail.event === "Image" ?
+                        <img
+                            src={props.detail.content}
+                            alt={"No Context Available"}
+                            style={styles.media(colors)}
+                        /> :
+
+                    props.detail.event === "GIF" ?
+                        <video controls autoPlay loop style={styles.media(colors)}>
+                            <source src={props.detail.content} type={"video/mp4"}/>
+
+                            <a href={props.detail.content} target={"_blank"} rel="noreferrer">
+                                {props.detail.content}
+                            </a>
+                        </video> : null
                 }
             </p>
         </div>
@@ -96,9 +110,9 @@ const styles = {
         display: "flex",
         flexDirection: "row",
         flexWrap: "wrap",
-        alignItems: "center",
+        alignItems: "top",
         justifyContent: "start",
-        gap: "0.0625in",
+        gap: "0.125in",
         padding: "0.0625in",
         borderRadius: "0.0625in",
         background: "#DDDDDD",
@@ -113,5 +127,10 @@ const styles = {
 
     event: {
         fontWeight: "bold"
-    }
+    },
+
+    media: colors => ({
+        borderRadius: "0.0625in",
+        border: `2px solid ${colors.veryLight}`
+    })
 };
