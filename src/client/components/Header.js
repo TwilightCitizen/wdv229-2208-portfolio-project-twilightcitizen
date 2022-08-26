@@ -8,11 +8,13 @@ Portfolio Project
 // Imports
 
 import { useContext } from "react";
+import { NavLink } from "react-router-dom";
 import { RiArrowGoBackFill } from "react-icons/ri";
 
 import { ColorContext, LayoutContext, PageContext } from "../app/App";
 import SearchBox from "./SearchBox"
 import IconNavLink from "./IconNavLink";
+
 
 // Constants
 
@@ -26,9 +28,17 @@ const Header = () => {
     const [page,] = useContext(PageContext);
     const icon = page.icon ? page.icon(styles.icon) : <></>;
 
+    console.log(icon.styles);
+
     return (
         <header style={styles.header(layout.header, colors)}>
-            {icon}
+            <NavLink
+                to={"/dashboard"}
+                style={styles.dashboardLink(colors)}
+            >
+                {icon}
+            </NavLink>
+
             <h1>{page.title}</h1>
 
             {
@@ -70,6 +80,10 @@ const styles = {
         margin: "0.25in",
         width: "auto"
     },
+
+    dashboardLink: colors => ({
+        color: colors.veryLight
+    }),
 
     search: {
         marginLeft: "auto",
