@@ -103,7 +103,7 @@ const layout = {
     },
 
     page: {
-        padding: "0.25in"
+        padding: "0.5in"
     },
 
     header: {
@@ -122,9 +122,9 @@ const styles = {
         flexWrap: "wrap",
         backgroundImage: `url("/${page?.background}")`,
         backgroundRepeat: "no-repeat",
-        backgroundSize: "100% 100%",
+        backgroundSize: "cover",
         backgroundAttachment: "fixed",
-        backgroundPosition: `0 0.25in`
+        backgroundPosition: `center 0.35in`
     }),
 
     content: {
