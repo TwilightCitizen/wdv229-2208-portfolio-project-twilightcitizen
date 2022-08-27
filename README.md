@@ -276,8 +276,61 @@ Data Persistence Chosen and Why:
 
 My final stand up...
 
+⚙️ Overview - What I worked on this past week
+
+Feature Development:
+
+- Modify Detail Page to Display Multimedia Inline
+- Heavily Refactored Kik Bot to Save Days on Kik for Users
+- Modified User Page to Display Days on Kik
+- Added Persistent Dashboard Navigation through Header Icon
+
+Enhancements:
+
+- Created SVG Background Images for Pages
+- Applied Background Images to Pages for Visual Interest
+- Added Usage Blurbs to Dashboard and Detail Pages
+
 <br>
+🌵 Challenges - What problems did I have & how I'm addressing them
+
+- Aggregating user data through 2 Kik API callbacks proved extremely challenging.  Data retrieved without Xiphias does not provide a user registration date/timestamp.  With Xiphias, it is provided, but it cannot be matched against a batch of users because the JID is not returned with it and the order of retrieval is not guaranteed to be in the same order requested.  On top of this, data retrieved with Xiphias can fail if the service is down.  Becuase of all of this, the API calls had to be wrapped in promises that resolve when the callbacks are called.  These had to be collectd into an array of promises for without and with Xiphias calls as Promise.all, and the with Xiphias calls had to be raced with a timeout so that at least the basic user data could be saved even if days on Kik could not be retrieved.  Really gruesome.
+
 <br>
+🏆 Accomplishments - What is something I "leveled up" on this week
+
+- Finally had a reason to use Promise.all and Promise.race that wasn't merely contrived example code
+
+<br>
+🔮 Next Steps - What I plan to prioritize and do next
+
+- Improve or replace fork of Kik Node API
+  - The Python API on which it is based is far more robust
+  - Rewriting in Rust would be fun and likely more performant
+- Aggregate user statistics for chat and lurk activity in a round-robin database
+- Enable a command language that lets users tell the bot to do things in chat
+  - Display user statistics 
+  - Kick users
+  - Blacklist users
+  - Whitelist users
+  - Kick inactive (non-Whitelisted) users when new users join to maintain user cap thresholds
+  - Text substitutions
+  - Other features RageBot already provides
+  - Other feature that RageBot does not provide
+- Add a control panel for mass kicking and/or blacklisting users
+- Refactor front-end/back-end connect to use websockets for live chat events 
+- Add the ability to search, highlight, and/or filter chat events based on select criteria
+- Cancel RageBot subscription and use my own bot
+<br>
+
+Other Stand-up Requirements:
+
+- API Used:
+  - YassienW's [Kik Node API](https://github.com/YassienW/kik-node-api), forked [here](https://github.com/TwilightCitizen/kik-node-api) with edits to overcome some issues that would otherwise cause crashes due to it not properly handling GIFs and videos.
+- Why Chosen:
+  - I have already been experimenting with Kik APIs in an extracurricular pursuit to replace RageBot with something of my own design for Kik groups in which I participate.
+  - A Node API was ideal because the MERN stack was a project requirement, and it being itself a Node project, was more well suited for integration with this project than the Python API on which it is based.
+
 <hr/>
 
 # Project Overview
