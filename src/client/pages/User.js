@@ -46,6 +46,7 @@ const User = () => {
         setPage(() => ({
             title: "User",
             icon: icon,
+            background: "UserSilhouettes.svg",
 
             backNavigation: {
                 title: "Chat",

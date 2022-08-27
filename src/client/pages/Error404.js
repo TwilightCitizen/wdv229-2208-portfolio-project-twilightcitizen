@@ -24,8 +24,9 @@ const Error404 = () => {
 
     useEffect(() => {
         setPage(() => ({
-            title: 'Error 404 - Not Found',
+            title: "Error 404 - Not Found",
             icon: icon,
+            background: "ExclamationPoints.svg",
 
             backNavigation: {
                 title: "Dashboard",

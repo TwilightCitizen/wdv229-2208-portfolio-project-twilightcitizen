@@ -43,6 +43,7 @@ const Detail = () => {
         setPage(() => ({
             title: `Chat ${isGroup ? "in" : "with"} ${selectedChat.displayName}`,
             icon: icon,
+            background: "ChatBubbles.svg",
             
             backNavigation: {
                 title: "Dashboard",

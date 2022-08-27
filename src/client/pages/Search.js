@@ -44,6 +44,7 @@ const Search = () => {
         setPage(() => ({
             title: `Search for "${searchTerms}"`,
             icon: icon,
+            background: "SearchGlasses.svg",
 
             backNavigation: {
                 title: "Dashboard",

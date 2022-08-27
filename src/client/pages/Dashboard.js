@@ -46,6 +46,7 @@ const Dashboard = () => {
         setPage(() => ({
             title: "Dashboard",
             icon: icon,
+            background: "ChatBubbles.svg",
             showSearch: true
         }));
     }, [setPage]);
