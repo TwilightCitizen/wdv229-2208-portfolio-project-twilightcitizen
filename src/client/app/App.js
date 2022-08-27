@@ -23,6 +23,7 @@ import Detail from "../pages/Detail";
 import User from "../pages/User";
 import Search from "../pages/Search";
 import Error404 from "../pages/Error404";
+import header from "../components/Header";
 
 // Contexts
 
@@ -42,7 +43,7 @@ const App = () => {
     const [user, setUser] = useState({});
 
     return (
-        <div className="App" style={styles.app}>
+        <div className="App" style={styles.app(page)}>
             <ColorContext.Provider value={colors}>
             <LayoutContext.Provider value={layout}>
             <PageContext.Provider value={[page, setPage]}>
@@ -115,11 +116,16 @@ const layout = {
 };
 
 const styles = {
-    app: {
+    app: page => ({
         display: "flex",
         flexDirection: "column",
-        flexWrap: "wrap"
-    },
+        flexWrap: "wrap",
+        backgroundImage: `url("/${page?.background}")`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "100% 100%",
+        backgroundAttachment: "fixed",
+        backgroundPosition: `0 0.25in`
+    }),
 
     content: {
         minHeight: `calc(${layout.app.minHeight} - ${layout.header.height} - ${layout.footer.height})`
