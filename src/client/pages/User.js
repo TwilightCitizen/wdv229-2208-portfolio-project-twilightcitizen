@@ -73,7 +73,7 @@ const User = () => {
                     <RiUserFill style={styles.profilePic(colors)}/>
             }
 
-            <label htmlFor={"username"}>Username</label>
+            <label htmlFor={"username"} style={styles.label}>Username</label>
 
             <input
                 id={"username"} name={"username"}
@@ -81,7 +81,7 @@ const User = () => {
                 disabled={true} style={styles.input(colors)}
             />
 
-            <label htmlFor={"displayName"}>Display Name</label>
+            <label htmlFor={"displayName"} style={styles.label}>Display Name</label>
 
             <input
                 id={"displayName"} name={"displayName"}
@@ -89,7 +89,7 @@ const User = () => {
                 disabled={true} style={styles.input(colors)}
             />
 
-            <label htmlFor={"daysOnKik"}>Days on Kik</label>
+            <label htmlFor={"daysOnKik"} style={styles.label}>Days on Kik</label>
 
             <input
                 id={"daysOnKik"} name={"daysOnKik"}
@@ -111,7 +111,7 @@ const styles = {
         display: "flex",
         flexDirection: "column",
         flexWrap: "wrap",
-        gap: "0.0625in",
+        gap: "0.125in",
 
         ...layout
     }),
@@ -123,6 +123,10 @@ const styles = {
         background: colors.dark,
         color: colors.veryLight,
     }),
+
+    label: {
+        marginBottom: "-0.0625in"
+    },
 
     input: colors => ({
         fontSize: "1.5em",
