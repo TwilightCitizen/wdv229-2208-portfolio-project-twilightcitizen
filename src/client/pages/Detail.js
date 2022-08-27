@@ -56,6 +56,8 @@ const Detail = () => {
 
     return (
         <div style={styles.detail(layout.page)}>
+            <p>Click on the link to any user to view that user's details.</p>
+
             {
                 chatDetailsPending ?
                     <h2>Searching for Chat Details {headerRest}</h2> :

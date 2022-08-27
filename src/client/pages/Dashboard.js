@@ -53,6 +53,7 @@ const Dashboard = () => {
 
     return (
         <div style={styles.dashboard(layout.page)}>
+            <p>Click on any chat link below for a detailed view of its chat events.</p>
             {
                 groupChatsPending ?
                     <h2>Searching for Group Chats</h2> :
